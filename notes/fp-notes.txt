@@ -1,0 +1,82 @@
+Functional Programming
+
+--------------------------------------------------------------------------------
+The basic concept
+--------------------------------------------------------------------------------
+
+1.  No side effects
+
+    - No mutation of variables
+    
+    - No printing to the console or to any device
+    
+    - No writing to files, databases, networks, or whatever
+    
+    - No exception throwing
+    
+    
+2.  Functions are black boxes that
+
+    - Take an argument (a single one, as you’ll see later)
+    
+    - Do mysterious things inside, such as mutating variables and a lot of 
+      imperativestyle stuff, but with no effect observable from outside
+      
+    - Return a (single) value
+    
+3.  In practice, it’s impossible for a function to have no side effects at all
+
+    - A function will cause writing to memory, registering mutations, thread 
+      launching, context switching, and other sorts of things that are indeed 
+      effects observable from outside
+      
+    - observable: that can be seen or noticed
+    
+4.  Functional programming is writing programs with no intentional side effects
+
+    - intentional: done in a way that was planned, not by chance 
+
+    - Means that side effects that are part of the expected outcome of the 
+      program 
+      
+    - There should also be as few non-intentional side effects as possible
+    
+5.  Referentially Transparent
+
+    - Code that doesn’t mutate or depend on the external world is said to be 
+      referentially transparent
+
+    - Having no side effects (and thus not mutating anything in the external 
+      world) isn’t enough for a program to be functional
+      
+    - Functional programs must also not be affected by the external world
+    
+    - The output of a functional program must depend only on its argument
+    
+    - Functional code may not read data from the console, a file, a remote URL, 
+      a database, or even from the system
+      
+6.  Properties Referentially Transparent
+
+    - Self-contained
+    
+    - Deterministic, which means it will always return the same value for the 
+      same argument
+      
+    - Never throw any kind of Exception
+    
+    - Won’t create conditions causing other code to unexpectedly fail
+    
+    - Won’t hang because some external device
+    
+    
+7.  The benefits of FP
+
+    - Functional programs are easier to reason about 推理 because they’re 
+      deterministic
+      
+    - Eeasier to test
+    
+    - Are more modular
+    
+    - Makes composition and recombination much easier
