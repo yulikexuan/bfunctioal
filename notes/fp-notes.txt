@@ -58,7 +58,13 @@ The basic concept
       
 6.  Properties Referentially Transparent
 
-    - Self-contained
+    - Self-contained:
+    
+      - Doesn’t depend on any external device to work 
+      
+      - Can use it in any context 
+      
+        - All have to do is provide a valid argument
     
     - Deterministic, which means it will always return the same value for the 
       same argument
@@ -66,6 +72,9 @@ The basic concept
     - Never throw any kind of Exception
     
     - Won’t create conditions causing other code to unexpectedly fail
+    
+      - Won’t mutate arguments or some other external data, causing the caller
+        to find itself with stale data or concurrent access exceptions
     
     - Won’t hang because some external device
     
@@ -79,4 +88,48 @@ The basic concept
     
     - Are more modular
     
+      - No side effects to handle
+      
+      - No exceptions to catch
+      
+      - No context mutation to deal with
+      
+      - No shared mutable state 
+      
+      - No concurrent modifications
+    
     - Makes composition and recombination much easier
+    
+      - All functions are referentially transparent, they can then be reused to 
+        build other programs without any modifications
+        
+    - Functional programs are inherently thread-safe because they avoid 
+      mutation of shared state 
+      
+      - This doesn’t mean that all data has to be immutable 
+      
+      - Shared data must be
+      
+      - Immutable data is always safer, even if the mutation is not visible 
+        externally
+        
+8.  Functional programming replaces side effects with returning a 
+    representation of these effects
+    
+9.  Pushing abstraction to the limit
+
+
+10. Summary
+
+    - Functional programming is programming with functions, returning values, 
+      and having no side effects
+      
+    - Functional programs are easy to reason about and easy to test
+    
+    - Functional programming offers a high level of abstraction and reusability
+    
+    - Functional programs are more robust than their imperative counterparts
+    
+    - Functional programs are safer in multithreading environments because they
+      avoid shared mutable state
+      
