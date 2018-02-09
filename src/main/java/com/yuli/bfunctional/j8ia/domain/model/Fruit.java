@@ -1,7 +1,7 @@
-//: com.yuli.j8ia.domain.model.Fruit.java
+//: com.yuli.bfunctional.j8ia.domain.model.Fruit.java
 
 
-package com.yuli.j8ia.domain.model;
+package com.yuli.bfunctional.j8ia.domain.model;
 
 
 import lombok.*;

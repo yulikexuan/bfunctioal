@@ -1,12 +1,12 @@
-//: com.yuli.j8ia.client.FruitClient.java
+//: com.yuli.bfunctional.j8ia.client.FruitClient.java
 
 
-package com.yuli.j8ia.client;
+package com.yuli.bfunctional.j8ia.client;
 
 
-import com.yuli.j8ia.domain.model.*;
-import com.yuli.j8ia.services.FruitService;
-import com.yuli.j8ia.services.IFruitService;
+import com.yuli.bfunctional.j8ia.domain.model.*;
+import com.yuli.bfunctional.j8ia.domain.services.FruitService;
+import com.yuli.bfunctional.j8ia.domain.services.IFruitService;
 
 import java.util.*;
 

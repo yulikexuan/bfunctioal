@@ -1,11 +1,10 @@
-//: com.yuli.j8ia.services.FruitService.java
+//: com.yuli.bfunctional.j8ia.domain.services.FruitService.java
 
 
-package com.yuli.j8ia.services;
+package com.yuli.bfunctional.j8ia.domain.services;
 
 
-import com.yuli.j8ia.domain.model.Fruit;
-import lombok.NonNull;
+import com.yuli.bfunctional.j8ia.domain.model.Fruit;
 
 import java.util.Comparator;
 import java.util.List;
