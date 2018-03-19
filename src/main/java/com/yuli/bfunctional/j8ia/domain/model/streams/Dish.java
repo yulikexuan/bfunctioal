@@ -10,6 +10,8 @@ import lombok.*;
 @Data
 public class Dish {
 
+	static final int LOW_CALORY_RULE = 400;
+
 	public enum Type {
 		MEAT, FISH, OTHER,
 	}///:~
@@ -24,6 +26,14 @@ public class Dish {
 		this.vegetarian = vegetarian;
 		this.calories = calories;
 		this.type = type;
+	}
+
+	public boolean hasLowCalory() {
+		return this.calories >= LOW_CALORY_RULE ? false : true;
+	}
+
+	public boolean isMeat() {
+		return this.type == Type.MEAT;
 	}
 
 }///:~

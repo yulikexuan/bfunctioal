@@ -7,6 +7,7 @@ package com.yuli.bfunctional.j8ia.client.ch05;
 import com.yuli.bfunctional.j8ia.domain.model.streams.Trader;
 import com.yuli.bfunctional.j8ia.domain.model.streams.Transaction;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PuttingIntoPracticeIT {

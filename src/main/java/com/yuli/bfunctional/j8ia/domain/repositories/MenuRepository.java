@@ -8,15 +8,15 @@ import com.yuli.bfunctional.j8ia.domain.model.streams.Dish;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 
 
 @Repository
 public class MenuRepository implements IMenuRepository {
 
 	@Override
-	public List<Dish> getMenu() {
-		List menu = Arrays.asList(
+	public Stream<Dish> getMenu() {
+		Stream<Dish> menu = Arrays.asList(
 				new Dish("pork", false, 800,
 						Dish.Type.MEAT),
 				new Dish("beef", false, 700,
@@ -35,7 +35,7 @@ public class MenuRepository implements IMenuRepository {
 						Dish.Type.FISH),
 				new Dish("salmon", false, 450,
 						Dish.Type.FISH)
-		);
+		).stream();
 
 		return menu;
 	}

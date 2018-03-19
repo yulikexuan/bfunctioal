@@ -1,10 +1,12 @@
-//: com.yuli.bfunctional.j8ia.domain.services.TransactionServiceIT.java
+//: com.yuli.bfunctional.j8ia.domain.services.TransactionServiceTest.java
 
 
 package com.yuli.bfunctional.j8ia.domain.services;
 
 
 import com.yuli.bfunctional.j8ia.domain.model.streams.Transaction;
+import com.yuli.bfunctional.j8ia.domain.repositories.ITransactionRepository;
+import com.yuli.bfunctional.j8ia.domain.repositories.TransactionRepository;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,20 +17,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThat;
 
 
-@Ignore
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class TransactionServiceIT {
+public class TransactionServiceTest {
 
-	@Autowired
+	private ITransactionRepository transactionRepository;
 	private TransactionService transactionService;
 
 	@Before
 	public void setUp() throws Exception {
+		this.transactionService = new TransactionService(
+				new TransactionRepository());
 	}
 
 	@Test
