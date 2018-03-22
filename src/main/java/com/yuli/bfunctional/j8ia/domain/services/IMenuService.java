@@ -20,7 +20,9 @@ public interface IMenuService {
 	List<String> getAll300CalDishesExceptFirstTwo();
 	List<String> getFirstTwoMeatDishes();
 	List<String> getAllDishNames();
-
+	List<Integer> countWordLength(List<String> words);
+	List<String> getUniqueCharactors(List<String> words);
+	int[] getSquares(int[] numbers);
 	int[] filterEvenNumbers(int max);
 
 }///:~

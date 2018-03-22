@@ -9,6 +9,8 @@ import com.yuli.bfunctional.j8ia.domain.repositories.IMenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -41,12 +43,17 @@ import static java.util.stream.Collectors.*;
  *
  * 8.  Given a list of words, return a list of the number of characters for
  *     each word P96
+ *
+ * 9.  Find out the length of the name of each dish P97
+ *
+ * 10. Return a list of all the unique characters for a list of words P98
+ *
+ * 11. Given a list of numbers, how would you return a list of the square of
+ *     each number? For example, given [1, 2, 3, 4, 5] you should return
+ *     [1, 4, 9, 16, 25] P99
+ *
 
-Find out the length of the name of each dish P97
 
-Return a list of all the unique characters for a list of words P98
-
-Given a list of numbers, how would you return a list of the square of each number? For example, given [1, 2, 3, 4, 5] you should return [1, 4, 9, 16, 25] P99
 
 Given two lists of numbers, how would you return all pairs of numbers? For example, given a list [1, 2, 3] and a list [3, 4] you should return [(1, 3), (1, 4), (2, 3), (2, 4), (3, 3), (3, 4)]. For simplicity, you can represent a pair as an array with two elements P99
 
@@ -195,6 +202,39 @@ public class MenuService implements IMenuService {
 		return this.getMenu()
 				.map(Dish::getName)
 				.collect(toList());
+	}
+
+	@Override
+	public List<Integer> countWordLength(List<String> words) {
+
+		if (words == null) {
+			return new ArrayList<>();
+		}
+
+		return words.stream()
+				.map(String::length)
+				.collect(toList());
+	}
+
+	@Override
+	public List<String> getUniqueCharactors(List<String> words) {
+
+		if (words == null) {
+			return new ArrayList<>();
+		}
+
+		return words.stream()
+				.map(w -> w.split(""))
+				.flatMap(Arrays::stream) // To avoid Stream<Stream<String>>
+				.distinct()
+				.collect(toList());
+	}
+
+	@Override
+	public int[] getSquares(int[] numbers) {
+		return Arrays.stream(numbers)
+				.map(i -> i * i)
+				.toArray();
 	}
 
 	@Override
