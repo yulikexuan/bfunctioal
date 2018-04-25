@@ -36,4 +36,8 @@ public class Dish {
 		return this.type == Type.MEAT;
 	}
 
+	public boolean isHealthy() {
+		return this.calories < 1000;
+	}
+
 }///:~

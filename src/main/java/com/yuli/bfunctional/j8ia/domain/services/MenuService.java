@@ -52,25 +52,32 @@ import static java.util.stream.Collectors.*;
  *     each number? For example, given [1, 2, 3, 4, 5] you should return
  *     [1, 4, 9, 16, 25] P99
  *
-
-
-
-Given two lists of numbers, how would you return all pairs of numbers? For example, given a list [1, 2, 3] and a list [3, 4] you should return [(1, 3), (1, 4), (2, 3), (2, 4), (3, 3), (3, 4)]. For simplicity, you can represent a pair as an array with two elements P99
-
-Extend the previous example to return only pairs whose sum isdivisible by 3? For example, (2, 4) and (3, 3) are valid P100
-
-Finding and matching: allMatch, anyMatch, noneMatch, findFirst, and findAny
-Find out whether the menu has a vegetarian option P100
-Find out whether the menu is healthy (that is, all dishes are below 1000 calories) Can use allMatch or noneMatch P101
-Find a dish that’s vegetarian P101
-Find the first square that’s divisible by 3 P102
+ * 12. Given two lists of numbers, how would you return all pairs of numbers?
+ *     For example, given a list [1, 2, 3] and a list [3, 4] you should return
+ *     [(1, 3), (1, 4), (2, 3), (2, 4), (3, 3), (3, 4)]?
+ *     For simplicity, you can represent a pair as an array with two elements
+ *     P99
+ *
+ * 13. Extend the previous example to return only pairs whose sum is divisible
+ *     by 3? For example, (2, 4) and (3, 3) are valid P100
+ *
+ * 14. Find out whether the menu has a vegetarian option
+ *
+ * 15. Find out whether the menu is healthy (that is, all dishes are below 1000
+ *     calories)
+ *
+ * 16. Calculate the sum of all calories in the menu P103
+ *
+ * 17. Find the highest calorie dish in the menu P105
+ *
+ * 18. Find the lowest calorie dish in the menu P105
+ *
+ * 19. count the number of dishes in a stream using the map and reduce methods?
+ *
+ *
+ *
 
 Reducing:
-Calculate the sum of all calories in the menu P103
-Find the highest calorie dish in the menu P105
-Find the lowest calorie dish in the menu P105
-How to count the number of dishes in a stream using the map and reduce methods?
-
 Numeric streams:
 Use mapToInt to calculate the sum of calories in the menu P112
 Use mapToInt to find the max calories in the menu P113
@@ -248,6 +255,128 @@ public class MenuService implements IMenuService {
 		return IntStream.rangeClosed(0, max)
 				.filter(i -> i % 2 == 0)
 				.toArray();
+	}
+
+	@Override
+	public List<int[]> getAllPairs(int[] nums1, int[] nums2) {
+
+		if ((nums1 == null) || (nums2 == null)) {
+			return new ArrayList<>();
+		}
+
+		return Arrays.stream(nums1)
+				.boxed()
+				.flatMap(n1 -> Arrays.stream(nums2)
+						.boxed()
+						.map(n2 -> new int[] {n1, n2}))
+				.collect(toList());
+	}
+
+	@Override
+	public List<int[]> getAdvancedPairs(int[] nums1, int[] nums2) {
+		if ((nums1 == null) || (nums2 == null)) {
+			return new ArrayList<>();
+		}
+
+		return Arrays.stream(nums1)
+				.boxed()
+				.flatMap(n1 -> Arrays.stream(nums2)
+						.boxed()
+						.filter(n2 -> (n2 + n1) % 3 == 0)
+						.map(n2 -> new int[] {n1, n2}))
+				.collect(toList());
+	}
+
+	@Override
+	public boolean hasVegetarianDish() {
+		return this.getMenu()
+				.anyMatch(Dish::isVegetarian);
+	}
+
+	/*
+	 * Find out whether the menu is healthy (that is, all dishes are below 1000
+	 * calories)
+	 */
+	@Override
+	public boolean hasHealthyDish() {
+		return this.getMenu().anyMatch(Dish::isHealthy);
+	}
+
+	@Override
+	public Dish getAnyVegetarianDish() throws RuntimeException {
+		return this.getMenu()
+				.filter(Dish::isVegetarian)
+				.findAny()
+				.orElseThrow(RuntimeException::new);
+	}
+
+	@Override
+	public boolean isHealthyMenu() {
+//		return this.getMenu()
+//				.allMatch(Dish::isHealthy);
+		return this.getMenu()
+				.noneMatch(d -> d.getCalories() >= 1000);
+	}
+
+	@Override
+	public int firstSquareDivisibleBy3(IntStream data) {
+
+		return data
+				.filter(i -> (i * i) % 3 == 0)
+				.findFirst()
+				.getAsInt();
+	}
+
+	@Override
+	public int getTotalCalories() {
+		return this.getMenu()
+				.mapToInt(Dish::getCalories)
+				.reduce(0, Integer::sum);
+	}
+
+	@Override
+	public Dish getTheHighestCalorieDish() {
+//		return this.getMenu()
+//				.reduce((d1, d2) ->
+//						d1.getCalories() > d2.getCalories() ? d1 : d2)
+//				.get();
+		return this.getMenu()
+				.max(Comparator.comparing(Dish::getCalories))
+				.get();
+	}
+
+	@Override
+	public Dish getTheLowestCalorieDish() {
+//		return this.getMenu()
+//				.reduce((d1, d2) ->
+//						d1.getCalories() < d2.getCalories() ? d1 : d2)
+//				.get();
+		return this.getMenu()
+				.min(Comparator.comparing(Dish::getCalories))
+				.get();
+	}
+
+	@Override
+	public int getDishCount() {
+		return this.getMenu()
+				.mapToInt(d -> 1)
+				.reduce(0, Integer::sum);
+	}
+
+	@Override
+	public int getTheHeightestCalories() {
+		return this.getMenu()
+				.mapToInt(Dish::getCalories)
+				.reduce(Integer::max)
+				.getAsInt();
+	}
+
+	@Override
+	public int getTheLowestCalories() {
+		return this.getMenu()
+				.mapToInt(Dish::getCalories)
+				.reduce(Integer::min)
+				.getAsInt();
 	}
 
 }///:~

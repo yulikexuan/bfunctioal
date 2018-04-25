@@ -15,9 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
 
@@ -199,6 +200,174 @@ public class MenuServiceTest {
 
 		// Then
 		assertThat(squares, is(new int[] {1, 4, 9, 16, 25}));
+	}
+
+	@Test
+	public void able_To_Generate_All_Pairs_From_Two_List_Of_Numbers() throws Exception {
+
+		// Given
+		int[] nums1 = {1, 2, 3};
+		int[] nums2 = {3, 4};
+
+		List<int[]> expected = Arrays.asList(
+				new int[] {1, 3},
+				new int[] {1, 4},
+				new int[] {2, 3},
+				new int[] {2, 4},
+				new int[] {3, 3},
+				new int[] {3, 4}
+		);
+
+		// When
+		List<int[]> pairs = this.menuService.getAllPairs(nums1, nums2);
+
+		// Then
+		assertThat(pairs.size(), is(6));
+
+		for (int i = 0; i < expected.size(); i++) {
+			assertArrayEquals(pairs.get(i), expected.get(i));
+		}
+	}
+
+	@Test
+	public void able_To_Generate_Pairs_Which_Sum_Is_Divisible_By_3() throws Exception {
+
+		// Given
+		int[] nums1 = {1, 2, 3};
+		int[] nums2 = {3, 4};
+
+		List<int[]> expected = Arrays.asList(
+				new int[] {1, 3},
+				new int[] {1, 4},
+				new int[] {2, 3},
+				new int[] {2, 4},
+				new int[] {3, 3},
+				new int[] {3, 4}
+		);
+
+		// When
+		List<int[]> pairs = this.menuService.getAdvancedPairs(nums1, nums2);
+
+		// Then
+		assertThat(pairs.size(), is(2));
+
+		boolean sumIsSix = !pairs.stream()
+				.mapToInt(a -> a[0] + a[1])
+				.filter(i -> (i - 6) != 0)
+				.findAny()
+				.isPresent();
+
+		assertThat(sumIsSix, is(true));
+	}
+
+	@Test
+	public void able_To_Know_If_Having_Any_Vegetarian_Dish() throws Exception {
+
+		// When
+		boolean havingVegetarianDish = this.menuService.hasVegetarianDish();
+
+		// Them
+		assertThat(havingVegetarianDish, is(true));
+	}
+
+	@Test
+	public void able_To_Know_If_Having_Healthy_Dish() throws Exception {
+
+		// When
+		boolean havingHealthyDish = this.menuService.hasHealthyDish();
+
+		// Them
+		assertThat(havingHealthyDish, is(true));
+	}
+
+	@Test
+	public void able_To_Get_Any_Vegetarian_Dish() throws Exception {
+
+		// When
+		Dish vDish = this.menuService.getAnyVegetarianDish();
+
+		// Then
+		assertThat(vDish, notNullValue());
+	}
+
+	@Test
+	public void able_To_Know_If_The_Whole_Menu_Is_Healthy() throws Exception {
+
+		// When
+		boolean isAHealthyMenu = this.menuService.isHealthyMenu();
+
+		// Then
+		assertThat(isAHealthyMenu, is(true));
+	}
+
+	@Test
+	public void able_To_Get_The_First_Number_Whose_Square_Is_Divisible_By_3() throws Exception {
+
+		// Given
+		IntStream data = IntStream.rangeClosed(1, 10);
+
+		// When
+		int number = this.menuService.firstSquareDivisibleBy3(data);
+
+		// Then
+		assertThat(number, is(3));
+	}
+
+	@Test
+	public void able_To_Know_Total_Calories() throws Exception {
+
+		// Given
+		int realTotal = 800 + 700 + 400 + 530 + 350 + 120 + 550 + 300 + 450;
+
+		// When
+		int total = this.menuService.getTotalCalories();
+
+		// Then
+		assertThat(total, is(realTotal));
+	}
+
+	@Test
+	public void able_To_Know_Which_Dish_Has_The_Heightest_Calories() throws Exception {
+
+		// When
+		Dish hcDish = this.menuService.getTheHighestCalorieDish();
+
+		// Then
+		assertThat(hcDish.getName(), is("pork"));
+		assertThat(hcDish.getCalories(), is(800));
+	}
+
+	@Test
+	public void able_To_Know_Which_Dish_Has_The_Lowest_Calories() throws Exception {
+
+		// When
+		Dish lcDish = this.menuService.getTheLowestCalorieDish();
+
+		// Then
+		assertThat(lcDish.getName(), is("season fruit"));
+		assertThat(lcDish.getCalories(), is(120));
+	}
+
+	@Test
+	public void able_To_Know_How_Many_Dishes_In_The_Menu() throws Exception {
+
+		// When
+		int count = this.menuService.getDishCount();
+
+		// Then
+		assertThat(count, is(9));
+	}
+
+	@Test
+	public void able_To_Know_The_Heightest_And_Lowest_Calories() throws Exception {
+
+		// When
+		int heightest = this.menuService.getTheHeightestCalories();
+		int lowest = this.menuService.getTheLowestCalories();
+
+		// Then
+		assertThat(heightest, is(800));
+		assertThat(lowest, is(120));
 	}
 
 }///:~
