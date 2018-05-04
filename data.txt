@@ -1,0 +1,5 @@
+Javas NIO API which is used for IO operations such as processing
+a file has been updated to take advantage of the Streams API Many static methods
+in java nio file Files return a stream For example a useful method is
+Files lines which returns a stream of lines as strings from a given file
+Using what
