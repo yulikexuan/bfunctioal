@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertArrayEquals;
@@ -368,6 +369,107 @@ public class MenuServiceTest {
 		// Then
 		assertThat(heightest, is(800));
 		assertThat(lowest, is(120));
+	}
+
+	@Test
+	public void able_To_Know_Sum_Of_Calories() throws Exception {
+
+		// Given
+		int total = this.menuService.getTotalCalories();
+
+		// When
+		int sum = this.menuService.getCaloriesSum();
+
+		// Then
+		assertThat(total, is(sum));
+	}
+
+	@Test
+	public void able_To_Know_The_Max_Calories() throws Exception {
+
+		// When
+		int maxC = this.menuService.getMaxCalories();
+
+		// Then
+		assertThat(maxC, is(800));
+	}
+
+	@Test
+	public void able_To_Generate_An_Array_Of_Even_Numbers() throws Exception {
+
+		// When
+		int[] evenNums = this.menuService.getEvenNumbers();
+
+		// Then
+		assertThat(evenNums.length, is(50));
+		boolean notAllEven = Arrays.stream(evenNums)
+				//.peek(i -> System.out.println(i))
+				.anyMatch(i -> i % 2 !=0);
+		assertThat(notAllEven, is(false));
+	}
+
+	@Test
+	public void able_To_Know_Pythagorean_Triples() throws Exception {
+
+		// When
+		this.menuService.getPythagoreanTriples()
+				.limit(5)
+				.forEach(t -> System.out.println(t[0] + ", " + t[1] + ", " +
+				        t[2]));
+
+	}
+
+	@Test
+	public void able_To_Generate_String_From_Stream_Of() throws Exception {
+
+		// When
+		String result = this.menuService.getStringFromStreamOf()
+				.reduce("", String::concat);
+
+		// Then
+		assertThat(result, is("Java 8 Lambdas In Action"));
+	}
+
+	@Test
+	public void able_To_Get_An_Empty_Stream_Of_String() throws Exception {
+
+		// When
+		Stream<String> strStream = this.menuService.getEmptyStream();
+
+		// Then
+		assertThat(strStream.count(), is(0L));
+	}
+
+	@Test
+	public void able_To_Convert_Int_Arr_To_IntStream() throws Exception {
+
+		// Given
+		int[] intArr = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, };
+
+		// When
+		IntStream intStream = this.menuService.convertToIntStream(intArr);
+
+		// Then
+		intStream.forEach(System.out::print);
+	}
+
+	@Test
+	public void able_To_Count_Distinct_Words_In_A_File() throws Exception {
+
+		// Given
+		String fileName = "data.txt";
+
+		// When
+		long num = this.menuService.getNumberOfUniqueWordsFromFile(fileName);
+
+		// Then
+		// System.out.println(num);
+		assertThat(num, is(43L));
+	}
+
+	@Test
+	public void able_To_Generate_Even_Numbers_From_Stream_Iterate_Method() throws Exception {
+
 	}
 
 }///:~

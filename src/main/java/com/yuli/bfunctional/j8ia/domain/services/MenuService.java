@@ -9,6 +9,10 @@ import com.yuli.bfunctional.j8ia.domain.repositories.IMenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -72,26 +76,35 @@ import static java.util.stream.Collectors.*;
  *
  * 18. Find the lowest calorie dish in the menu P105
  *
- * 19. count the number of dishes in a stream using the map and reduce methods?
+ * 19. Count the number of dishes in a stream using the map and reduce methods?
+ *
+ * 20. Use mapToInt to calculate the sum of calories in the menu P112
+ *
+ * 21. Use mapToInt to find the max calories in the menu P113
+ *
+ * 22. Use IntStream to generate a stream of even numbers from 1 to 100 P114
+ *
+ * 23. Create a stream of Pythagorean triples P114
+ *
+ * 24. Create a stream of strings directly using Stream.of P117
+ *
+ * 25. Get an empty stream using Stream.empty P117
+ *
+ * 26. Convert an array of primitive ints into an IntStream P117
+ *
+ * 27. Find out the number of unique words in a file P118
+ *
+ * 28. Use the Stream.iterate method to produces a stream of all even numbers
+ *     P118
  *
  *
  *
-
+ *
+ *
 Reducing:
-Numeric streams:
-Use mapToInt to calculate the sum of calories in the menu P112
-Use mapToInt to find the max calories in the menu P113
-Use IntStream to generate a stream of even numbers from 1 to 100 P114
-Create a stream of Pythagorean triples P114
-
 Building streams:
-Create a stream of strings directly using Stream.of P117
-Get an empty stream using Stream.empty P117
-Convert an array of primitive ints into an IntStream P117
-Find out the number of unique words in a file P118, Files.lines to return a stream where each element is a line in the given file; Many static methods in java.nio.file.Files return a stream
-
 Create infinite streams: Stream.iterate & Stream.generate
-Use the Stream.iterate method to produces a stream of all even numbers P118
+
 Use Stream.iterate to generate Fibonacci tuples series P119
 Use Stream.generate to generate a stream of five random double numbers from 0 to 1 P120
 Use IntStream.generate to generate an infinite stream of ones (1) P120
@@ -132,7 +145,6 @@ Find the highest-calorie dish in each type (not in Optional) P138
 Count total calories in each type P138
 Which CaloricLevels (in a Set) are available in the menu for each type of Dish P139
 Which CaloricLevels (in a HashSet) are available in the menu for each type of Dish P140
-
 
 Partitioning
 You are a vegetarian or have invited a vegetarian friend to have dinner with you, you may be interested in partitioning the menu into vegetarian and nonvegetarian dishes and then retrieve all the vegetarian dishes P140
@@ -377,6 +389,86 @@ public class MenuService implements IMenuService {
 				.mapToInt(Dish::getCalories)
 				.reduce(Integer::min)
 				.getAsInt();
+	}
+
+	@Override
+	public int getCaloriesSum() {
+		return this.getMenu()
+				.mapToInt(Dish::getCalories)
+				.sum();
+	}
+
+	@Override
+	public int getMaxCalories() {
+		return this.getMenu()
+				.mapToInt(Dish::getCalories)
+				.max()
+				.getAsInt();
+	}
+
+	@Override
+	public int[] getEvenNumbers() {
+
+		return IntStream.rangeClosed(1, 100)
+				.filter(i -> i % 2 == 0)
+				.toArray();
+	}
+
+	@Override
+	public Stream<double[]> getPythagoreanTriples() {
+		return IntStream.rangeClosed(1, 100)
+				.boxed()
+				.flatMap(a -> IntStream.rangeClosed(a, 100)
+						//.filter(b -> getPythagoreanSqrt(a, b) % 1 == 0)
+				        .mapToObj(b -> new double[] {
+				                a, b, Math.sqrt(a * a + b * b)})
+						.filter(t -> t[2] % 1 == 0)
+				);
+	}
+
+	@Override
+	public double getPythagoreanSqrt(int a, int b) {
+		return Math.sqrt(a * a + b * b);
+	}
+
+	@Override
+	public Stream<String> getStringFromStreamOf() {
+		return Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
+	}
+
+	@Override
+	public Stream<String> getEmptyStream() {
+		return Stream.empty();
+	}
+
+	@Override
+	public IntStream convertToIntStream(int[] arr) {
+		return Arrays.stream(arr);
+	}
+
+	@Override
+	public long getNumberOfUniqueWordsFromFile(String fileName) {
+
+		Path filePath = Paths.get(fileName);
+
+		try (Stream<String> lines = Files.lines(filePath,
+				Charset.defaultCharset())) {
+
+			return lines.flatMap(line -> Arrays.stream(line.split(" ")))
+					.distinct()
+					.count();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public int[] getEvenNumbersWithIteration(int count) {
+		return Stream.iterate(0, i -> i + 2)
+				.limit(count)
+				.mapToInt(i -> i)
+				.toArray();
 	}
 
 }///:~

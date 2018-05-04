@@ -38,6 +38,15 @@ public interface IMenuService {
 	Dish getTheHighestCalorieDish();
 	Dish getTheLowestCalorieDish();
     int getDishCount();
-
+    int getCaloriesSum();
+	int getMaxCalories();
+	int[] getEvenNumbers();
+	Stream<double[]> getPythagoreanTriples();
+    double getPythagoreanSqrt(int a, int b);
+	Stream<String> getStringFromStreamOf();
+	Stream<String> getEmptyStream();
+	IntStream convertToIntStream(int[] arr);
+	long getNumberOfUniqueWordsFromFile(String fileName);
+	int[] getEvenNumbersWithIteration(int count);
 
 }///:~
