@@ -11,9 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -470,6 +468,180 @@ public class MenuServiceTest {
 	@Test
 	public void able_To_Generate_Even_Numbers_From_Stream_Iterate_Method() throws Exception {
 
+		// Given
+		int count = 10;
+		int[] evenNums = {
+				0, 2, 4, 6, 8, 10, 12, 14, 16, 18,
+		};
+
+		// When
+		int[] result = this.menuService.getEvenNumbersWithIteration(count);
+
+		// Then
+        assertThat(result, equalTo(result));
+	}
+
+	@Test
+	public void able_To_Generate_Fibonaccis() throws Exception {
+
+		// Given
+		int count = 10;
+		List<Integer> expected = Arrays.asList(0, 1, 1, 2, 3, 5, 8, 13, 21, 34);
+
+
+		// When
+		List<Integer> fibonaccis = this.menuService.getFibonaccis(10);
+
+		// Then
+		assertThat(fibonaccis, equalTo(expected));
+	}
+
+	@Test
+	public void able_To_Generate_Randoms() throws Exception {
+
+		// Given
+		int count = 10;
+
+		// When
+		double[] randoms = this.menuService.getDoubleRandom(count);
+
+		// Then
+		assertThat(randoms.length, is(count));
+		Arrays.stream(randoms).forEach(d -> System.out.println(d));
+	}
+
+	@Test
+	public void able_To_Generate_An_Array_Of_One() throws Exception {
+
+		// Given
+		int count = 10;
+		int[] expected = new int[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, };
+
+		// When
+		int[] oneArray = this.menuService.getArrayOfOne(count);
+
+		// Then
+		assertThat(oneArray, equalTo(expected));
+	}
+
+	@Test
+	public void able_To_Know_How_Many_Dishes_In_Menu() throws Exception {
+
+		// When
+		int dishCount = this.menuService.getDishCount();
+		long dishNum = this.menuService.getMenu()
+				.count();
+		long result = this.menuService.getNumberOfDishes();
+
+		// Then
+		assertThat(result, equalTo(dishNum));
+		assertThat(result, equalTo((long)dishCount));
+	}
+
+	@Test
+	public void able_To_Know_The_Dish_With_Highest_Calories() throws Exception {
+
+		// Given
+		Dish expected = this.menuService.getTheHighestCalorieDish();
+
+		// When
+		Dish hcDish = this.menuService.collectHighestCaloriesDish().get();
+
+		// Then
+		assertThat(expected, is(hcDish));
+	}
+
+	@Test
+	public void able_To_Know_The_Dish_With_Lowest_Calories() throws Exception {
+
+		// Given
+		Dish expected = this.menuService.getTheLowestCalorieDish();
+
+		// When
+		Dish lcDish = this.menuService.collectLowestCaloriesDish().get();
+
+		// Then
+		assertThat(expected, is(lcDish));
+	}
+
+	@Test
+	public void able_To_Collect_Total_Calories() throws Exception {
+
+		// Given
+		int expected = this.menuService.getTotalCalories();
+
+		// When
+		int totalCalcories = this.menuService.collectTotalCalories();
+
+		// Then
+		assertThat(expected, is(totalCalcories));
+	}
+
+	@Test
+	public void able_To_Collect_Average_Of_Calories() throws Exception {
+
+		// Given
+		double expected = (double)this.menuService.collectTotalCalories() /
+				this.menuService.getDishCount();
+
+		// When
+		double aveCalories = this.menuService.collectAverageOfCalories();
+
+		// Then
+		assertThat(expected, is(aveCalories));
+	}
+
+	@Test
+	public void able_To_Collect_Summary_Statistics_Of_Calories() throws Exception {
+
+		// When
+		IntSummaryStatistics iss = this.menuService.collectStatistsiceOfCalories();
+		System.out.println(iss);
+
+		// Then
+		assertThat(iss.getAverage(),
+				is(this.menuService.collectAverageOfCalories()));
+		assertThat(iss.getMax(), is(this.menuService.getMaxCalories()));
+		assertThat(iss.getMin(), is(this.menuService.getTheLowestCalories()));
+		assertThat(iss.getCount(), is((long)this.menuService.getDishCount()));
+		assertThat(iss.getSum(), is((long)this.menuService.getTotalCalories()));
+	}
+
+	@Test
+	public void able_To_Collect_All_Dish_Names() throws Exception {
+
+		// Given
+		String expected = "Dish names: [pork, beef, chicken, french fries, rice, season fruit, pizza, prawns, salmon] ";
+
+		// When
+		String dishNames = this.menuService.collectDishNames(
+				", ", "Dish names: [", "] ");
+//		System.out.println(dishNames);
+
+		// Then
+		assertThat(dishNames, is(expected));
+	}
+
+	@Test
+	public void able_To_Reducing_Calories() throws Exception {
+
+		// When
+		long total = this.menuService.reducingTotalCalories();
+
+		// Then
+		assertThat(total, is((long)this.menuService.getTotalCalories()));
+	}
+
+	@Test
+	public void able_To_Reducing_The_Dish_With_Highest_Calories() throws Exception {
+
+		// Given
+
+		// When
+		Optional<Dish> hcDish = this.menuService.reducingHighestCaloriesDish();
+
+		// Then
+		assertThat(hcDish, is(this.menuService.collectHighestCaloriesDish()));
 	}
 
 }///:~

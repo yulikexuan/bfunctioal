@@ -13,10 +13,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -97,35 +95,48 @@ import static java.util.stream.Collectors.*;
  * 28. Use the Stream.iterate method to produces a stream of all even numbers
  *     P118
  *
+ * 29. Create infinite streams: Stream.iterate & Stream.generate
+ *     Use Stream.iterate to generate Fibonacci tuples series P119
  *
+ * 30. Use Stream.generate to generate a stream of five random double numbers
+ *     from 0 to 1 P120
  *
+ * 31. Use IntStream.generate to generate an infinite stream of ones (1) P120
  *
+ * 32. Collectors for Reducing and summarizing:
+ *     Count the number of dishes in the menu, using Collectors.counting P127
+ *
+ * 33. The counting collector can be especially useful when used in combination
+ *     with other collectors
+ *     Find the highest-calorie dish in the menu using Collectors.maxBy P127
+ *     Find the lowest-calorie dish in the menu using Collectors.minBy P127
+ *
+ *     Summarization
+ * 34. Find the total number of calories in your menu list with
+ *     Collectors.summingInt P128
+ *
+ * 35. Calculate the average of the same set of calories P129
+ *
+ * 36. Count the elements in the menu and obtain the sum, average, maximum,
+ *     and minimum of the calories contained in each dish with a single
+ *     summarizing operation P1293
+ *
+ *     Joining strings
+ *
+ * 37. Concatenate the names of all the dishes in the menu, using commas to
+ *     separate each P129
+ *
+ *     Generalized summarization with reduction
+ *
+ * 38. Collectors.reducing factory method is a generalization of all
+ *     <T,U> Collector<T, ?, U> reducing(U identity,
+               Function<? super T,? extends U> mapper, BinaryOperator<U> op)
+
+ *     Calculate the total calories in the menu with a collector created from
+ *     the Collectors.reducing method P130
  *
 Reducing:
-Building streams:
-Create infinite streams: Stream.iterate & Stream.generate
 
-Use Stream.iterate to generate Fibonacci tuples series P119
-Use Stream.generate to generate a stream of five random double numbers from 0 to 1 P120
-Use IntStream.generate to generate an infinite stream of ones (1) P120
-
-Collectors for Reducing and summarizing
-Count the number of dishes in the menu, using Collectors.counting P127
-The counting collector can be especially useful when used in combination with other collectors
-Count the number of dishes in the menu, using Stream.count P127
-Find the highest-calorie dish in the menu using Collectors.maxBy P127
-Find the lowest-calorie dish in the menu using Collectors.minBy P127
-
-Summarization
-Find the total number of calories in your menu list with Collectors.summingInt P128
-Calculate the average of the same set of calories P129
-Count the elements in the menu and obtain the sum, average, maximum, and minimum of the calories contained in each dish with a single summarizing operation P129
-Joining strings
-Concatenate the names of all the dishes in the menu, using commas to separate each P129
-
-Generalized summarization with reduction
-Collectors.reducing factory method is a generalization of all
-Calculate the total calories in the menu with a collector created from the Collectors.reducing method P130
 Find the highest-calorie dish using the one-argument version of Collectors.reducing P130
 Calculate the total calories of the menu by using Collectors.reducing and Integer.sum P131
 Calculate the total calories of the menu by using Stream.reduce and Integer.sum P132
@@ -469,6 +480,147 @@ public class MenuService implements IMenuService {
 				.limit(count)
 				.mapToInt(i -> i)
 				.toArray();
+	}
+
+	// Use Stream.iterate to generate Fibonacci tuples series
+	@Override
+	public List<Integer> getFibonaccis(int count) {
+		int[] init = {0, 1};
+		return Stream.iterate(init, arr ->
+				new int[] {arr[1], arr[0] + arr[1]})
+				.limit(10)
+				.map(t -> t[0])
+				.collect(toList());
+	}
+
+	/*
+	 * Use Stream.generate to generate a stream of five random double numbers
+	 * from 0 to 1
+	 */
+	@Override
+	public double[] getDoubleRandom(int count) {
+		return Stream.generate(Math::random)
+				.limit(count)
+				.mapToDouble(d -> d)
+				.toArray();
+	}
+
+	@Override
+	public int[] getArrayOfOne(int count) {
+		return IntStream
+				.generate(() -> 1)
+				.limit(count)
+				.toArray();
+	}
+
+	// COLLECT COLLECTORS ////////////////////////////////////////////////////
+
+	// Count the number of dishes in the menu
+	@Override
+	public long getNumberOfDishes() {
+
+//		this.getMenu()
+//				.mapToInt(m -> 1)
+//				.reduce(Integer::sum);
+//
+//		this.getMenu().count();
+
+		/*
+		 * Returns a Collector accepting elements of type T that counts the
+		 * number of input elements. If no elements are present, the result is
+		 * 0.
+		 */
+		return this.getMenu()
+				.collect(Collectors.counting());
+	}
+
+	@Override
+	public Optional<Dish> collectHighestCaloriesDish() {
+
+		/*
+		 * The reduce
+		 */
+//		return this.getMenu()
+//				.max(Comparator.comparing(Dish::getCalories));
+
+		/*
+		 * <T>
+		 * Collector<T, ?, Optional<T>> maxBy(Comparator<? super T> comparator)
+		 *
+		 * Returns a Collector that produces the maximal element according to a
+		 * given Comparator, described as an Optional<T>
+		 */
+		return this.getMenu()
+				.collect(Collectors.maxBy(Comparator.comparing(
+						Dish::getCalories)));
+	}
+
+	@Override
+	public Optional<Dish> collectLowestCaloriesDish() {
+
+//		return this.getMenu()
+//				.min(Comparator.comparing(Dish::getCalories));
+
+		/*
+		 * <T>
+		 * Collector<T, ?, Optional<T>> minBy(Comparator<? super T> comparator)
+		 *
+		 * Returns a Collector that produces the minimal element according to a
+		 * given Comparator, described as an Optional<T>.
+		 */
+		return this.getMenu()
+				.collect(Collectors.minBy(Comparator.comparing(
+						Dish::getCalories)));
+	}
+
+	@Override
+	public int collectTotalCalories() {
+
+//		return this.getMenu()
+//				.mapToInt(Dish::getCalories)
+//				.reduce(0, Integer::sum);
+
+		return this.getMenu()
+				.collect(Collectors.summingInt(Dish::getCalories));
+	}
+
+	/*
+	 * <T> Collector<T,?,Double> averagingInt(ToIntFunction<? super T> mapper)
+	 */
+	@Override
+	public double collectAverageOfCalories() {
+		return this.getMenu()
+				.collect(Collectors.averagingInt(Dish::getCalories));
+	}
+
+	@Override
+	public IntSummaryStatistics collectStatistsiceOfCalories() {
+		return this.getMenu()
+				.collect(Collectors.summarizingInt(
+						Dish::getCalories));
+	}
+
+	@Override
+	public String collectDishNames(CharSequence delimiter,
+	                               CharSequence prefix,
+	                               CharSequence suffix) {
+		return this.getMenu()
+				.map(Dish::getName)
+				.collect(Collectors.joining(delimiter, prefix, suffix));
+	}
+
+	@Override
+	public long reducingTotalCalories() {
+		return this.getMenu()
+				.collect(Collectors.reducing(0, Dish::getCalories,
+						Integer::sum));
+	}
+
+	@Override
+	public Optional<Dish> reducingHighestCaloriesDish() {
+		return this.getMenu()
+				.collect(reducing((d1, d2) ->
+						d1.getCalories() > d2.getCalories() ? d1 : d2));
 	}
 
 }///:~

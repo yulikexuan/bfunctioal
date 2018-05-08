@@ -6,7 +6,9 @@ package com.yuli.bfunctional.j8ia.domain.services;
 
 import com.yuli.bfunctional.j8ia.domain.model.streams.Dish;
 
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -48,5 +50,19 @@ public interface IMenuService {
 	IntStream convertToIntStream(int[] arr);
 	long getNumberOfUniqueWordsFromFile(String fileName);
 	int[] getEvenNumbersWithIteration(int count);
+	List<Integer> getFibonaccis(int count);
+	double[] getDoubleRandom(int count);
+	int[] getArrayOfOne(int count);
+    long getNumberOfDishes();
+	Optional<Dish> collectHighestCaloriesDish();
+	Optional<Dish> collectLowestCaloriesDish();
+	int collectTotalCalories();
+	double collectAverageOfCalories();
+	IntSummaryStatistics collectStatistsiceOfCalories();
+    String collectDishNames(CharSequence delimiter,
+                            CharSequence prefix,
+                            CharSequence suffix);
+	long reducingTotalCalories();
+	Optional<Dish> reducingHighestCaloriesDish();
 
 }///:~
