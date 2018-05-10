@@ -10,11 +10,16 @@ import lombok.*;
 @Data
 public class Dish {
 
-	static final int LOW_CALORY_RULE = 400;
+	public static final int LOW_CALORY_RULE = 400;
+	public static final int FAT_CALORY_RULE = 700;
 
 	public enum Type {
 		MEAT, FISH, OTHER,
-	}///:~
+	}//:~
+
+	public enum CALORIC_LEVEL {
+		DIET, NORMAL, FAT,
+	}
 
 	private String name;
 	private boolean vegetarian;
@@ -35,9 +40,27 @@ public class Dish {
 	public boolean isMeat() {
 		return this.type == Type.MEAT;
 	}
-
+	public boolean isFish() {
+		return this.type == Type.FISH;
+	}
+	public boolean isOtherType() {
+		return this.type == Type.OTHER;
+	}
 	public boolean isHealthy() {
 		return this.calories < 1000;
+	}
+
+	public boolean isDiet() {
+		return this.getCalories() < LOW_CALORY_RULE;
+	}
+
+	public boolean isNormal() {
+		return this.getCalories() >= LOW_CALORY_RULE &&
+				this.getCalories() < FAT_CALORY_RULE;
+	}
+
+	public boolean isFat() {
+		return this.getCalories() >= FAT_CALORY_RULE;
 	}
 
 }///:~

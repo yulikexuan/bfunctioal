@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.util.Comparator.*;
 import static java.util.stream.Collectors.*;
 
 
@@ -135,25 +136,52 @@ import static java.util.stream.Collectors.*;
  *     Calculate the total calories in the menu with a collector created from
  *     the Collectors.reducing method P130
  *
+ * 39. Find the highest-calorie dish using the one-argument version of
+ *     Collectors.reducing P130
+ *     Calculate the total calories of the menu by using Collectors.reducing
+ *     and Integer.sum P131
+ *     Calculate the total calories of the menu by using Stream.reduce and
+ *     Integer.sum P132
+ *     Calculate the total calories of the menu by using Stream.mapToInt and
+ *     IntStream.sum P133
+ *
+ * 40. Join all menu item names in one string by using Collectors.joining P133
+ *     Join all menu item names in one string by using Collectors.reducing
+ *     (one arg and two arts ) P133
+ *
+ *     Grouping
+ * 41. Classify the dishes in the menu according to their type, putting the
+ *     ones containing meat in a group, the ones with fish in another group,
+ *     and all others in a third group by using Collectors.groupingBy P134
+ *
+ *     Classify as “diet” all dishes with 400 calories or fewer, set to
+ *     “normal” the dishes having between 400 and 700 calories, and set to
+ *     “fat” the ones with more than 700 calories P135
+ *
+ *     Muli-level Grouping
+ *     Classify the dishes in the menu according to their type and calories
+ *     with two-argument version of the Collectors.groupingBy factory method
+ *     P135
+ *
+ *     Sub-Grouping
+ *     Count the number of Dishes in the menu for each type, by passing the
+ *     counting collector as a second argument to the groupingBy collector
+ *     P137
+ *     Find the highest-calorie dish (in Optional) in each type P137
+ *     Find the highest-calorie dish in each type (not in Optional) P138
+ *     Count total calories in each type P138
+ *
+
+
+ *
 Reducing:
 
-Find the highest-calorie dish using the one-argument version of Collectors.reducing P130
-Calculate the total calories of the menu by using Collectors.reducing and Integer.sum P131
-Calculate the total calories of the menu by using Stream.reduce and Integer.sum P132
-Calculate the total calories of the menu by using Stream.mapToInt and IntStream.sum P133
-Join all menu item names in one string by using Collectors.joining P133
-Join all menu item names in one string by using Collectors.reducing (one arg and two arts ) P133
-
 Grouping
-Classify the dishes in the menu according to their type, putting the ones containing meat in a group, the ones with fish in another group, and all others in a third group by using Collectors.groupingBy P134
-Classify as “diet” all dishes with 400 calories or fewer, set to “normal” the dishes having between 400 and 700 calories, and set to “fat” the ones with more than 700 calories P135
+
+
 
 Multilevel Grouping
-Classify the dishes in the menu according to their type and calories with two-argument version of the Collectors.groupingBy factory method P135
-Count the number of Dishes in the menu for each type, by passing the counting collector as a second argument to the groupingBy collector P137
-Find the highest-calorie dish (in Optional) in each type P137
-Find the highest-calorie dish in each type (not in Optional) P138
-Count total calories in each type P138
+
 Which CaloricLevels (in a Set) are available in the menu for each type of Dish P139
 Which CaloricLevels (in a HashSet) are available in the menu for each type of Dish P140
 
@@ -186,7 +214,7 @@ public class MenuService implements IMenuService {
 
 		return this.getMenu()
 				.filter(Dish::hasLowCalory)
-				.sorted(Comparator.comparingInt(Dish::getCalories))
+				.sorted(comparingInt(Dish::getCalories))
 				.map(d -> d.getName())
 				.collect(toList());
 	}
@@ -352,9 +380,13 @@ public class MenuService implements IMenuService {
 
 	@Override
 	public int getTotalCalories() {
+//		return this.getMenu()
+//				.mapToInt(Dish::getCalories)
+//				.reduce(0, Integer::sum);
+
 		return this.getMenu()
 				.mapToInt(Dish::getCalories)
-				.reduce(0, Integer::sum);
+				.sum();
 	}
 
 	@Override
@@ -621,6 +653,75 @@ public class MenuService implements IMenuService {
 		return this.getMenu()
 				.collect(reducing((d1, d2) ->
 						d1.getCalories() > d2.getCalories() ? d1 : d2));
+	}
+
+	@Override
+	public String joinStringsWithReducing() {
+		return this.getMenu()
+				.map(Dish::getName)
+				.collect(Collectors.reducing(
+						"", (n1, n2) -> n1 + n2));
+	}
+
+	@Override
+	public Map<Dish.Type, List<Dish>> getDishedByType() {
+		return this.getMenu()
+				.collect(Collectors.groupingBy(Dish::getType));
+	}
+
+	@Override
+	public Map<Dish.CALORIC_LEVEL, List<Dish>> getDishedByCaloricLevel() {
+		return this.getMenu()
+				.collect(Collectors.groupingBy(
+						d -> {
+							if (d.getCalories() <= Dish.LOW_CALORY_RULE ) {
+								return Dish.CALORIC_LEVEL.DIET;
+							} else if ((d.getCalories() > Dish.LOW_CALORY_RULE)
+							        && (d.getCalories() < 700)) {
+								return Dish.CALORIC_LEVEL.NORMAL;
+							} else {
+								return Dish.CALORIC_LEVEL.FAT;
+							}
+						}
+				));
+	}
+
+	@Override
+	public Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>>
+			getDishByTypeThenCaloricLevel() {
+
+		return this.getMenu()
+				.collect(Collectors.groupingBy(Dish::getType,
+						Collectors.groupingBy(d -> {
+							if (d.isFat()) {
+								return Dish.CALORIC_LEVEL.FAT;
+							} else if (d.isNormal()) {
+								return Dish.CALORIC_LEVEL.NORMAL;
+							} else {
+								return Dish.CALORIC_LEVEL.DIET;
+							}
+						})));
+	}
+
+	@Override
+	public Map<Dish.Type, Long> getDishCountForType() {
+		return this.getMenu()
+				.collect(groupingBy(Dish::getType, counting()));
+	}
+
+	@Override
+	public Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType() {
+		return this.getMenu()
+				.collect(Collectors.groupingBy(Dish::getType,
+						maxBy(comparingInt(Dish::getCalories))));
+	}
+
+	@Override
+	public Map<Dish.Type, Dish> getOneKCaloriesByType() {
+		return this.getMenu().
+				collect(groupingBy(Dish::getType,
+						collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
+								Optional::get)));
 	}
 
 }///:~

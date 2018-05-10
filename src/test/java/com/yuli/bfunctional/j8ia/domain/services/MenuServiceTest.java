@@ -8,10 +8,12 @@ import com.yuli.bfunctional.j8ia.domain.model.streams.Dish;
 import com.yuli.bfunctional.j8ia.domain.repositories.IMenuRepository;
 import com.yuli.bfunctional.j8ia.domain.repositories.MenuRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.collection.IsMapContaining;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -643,5 +645,135 @@ public class MenuServiceTest {
 		// Then
 		assertThat(hcDish, is(this.menuService.collectHighestCaloriesDish()));
 	}
+
+	@Test
+	public void able_To_Join_Dish_Names_With_Reducing_Of_Collectors() throws Exception {
+
+		// Givne
+		String expected = "porkbeefchickenfrench friesriceseason fruitpizza" +
+				"prawnssalmon";
+
+		// When
+		String allNames = this.menuService.joinStringsWithReducing();
+
+		// Then
+//		System.out.println(allNames);
+		assertThat(allNames, is(expected));
+	}
+
+	@Test
+	public void able_To_Group_Dishes_By_Type() throws Exception {
+
+		// Given
+		List<Dish> meatDishes = this.menuService.getMenu()
+				.filter(Dish::isMeat)
+				.collect(Collectors.toList());
+
+		List<Dish> fishDished = this.menuService.getMenu()
+				.filter(Dish::isFish)
+				.collect(Collectors.toList());
+
+		List<Dish> otherDishes = this.menuService.getMenu()
+				.filter(Dish::isOtherType)
+				.collect(Collectors.toList());
+
+		 // When
+		Map<Dish.Type, List<Dish>> dishesByType =
+				this.menuService.getDishedByType();
+
+		// Then
+		assertThat(dishesByType, IsMapContaining.hasEntry(Dish.Type.MEAT,
+				meatDishes));
+		assertThat(dishesByType, IsMapContaining.hasEntry(Dish.Type.FISH,
+		        fishDished));
+		assertThat(dishesByType, IsMapContaining.hasEntry(Dish.Type.OTHER,
+				otherDishes));
+	}
+
+	@Test
+	public void able_To_Group_Dishes_By_Caloric_Level() throws Exception {
+
+		// Given
+		List<Dish> dietDishes = this.menuService.getMenu()
+				.filter(d -> d.getCalories() <= Dish.LOW_CALORY_RULE)
+				.collect(Collectors.toList());
+
+		List<Dish> normalDishes = this.menuService.getMenu()
+				.filter(d -> d.getCalories() > Dish.LOW_CALORY_RULE &&
+						d.getCalories() < 700)
+				.collect(Collectors.toList());
+
+		List<Dish> fatDishes = this.menuService.getMenu()
+				.filter(d -> d.getCalories() >= 700)
+				.collect(Collectors.toList());
+
+		// When
+		Map<Dish.CALORIC_LEVEL, List<Dish>> dishesByCaloricLevel =
+				this.menuService.getDishedByCaloricLevel();
+
+		// Then
+//		System.out.println(dishesByCaloricLevel);
+		assertThat(dishesByCaloricLevel, IsMapContaining.hasEntry(
+				Dish.CALORIC_LEVEL.DIET, dietDishes));
+		assertThat(dishesByCaloricLevel, IsMapContaining.hasEntry(
+				Dish.CALORIC_LEVEL.NORMAL, normalDishes));
+		assertThat(dishesByCaloricLevel, IsMapContaining.hasEntry(
+				Dish.CALORIC_LEVEL.FAT, fatDishes));
+	}
+
+	@Test
+	public void able_To_Group_Dishes_By_Type_Then_By_Caloric_Level() throws Exception {
+
+		// Given
+		Map<Dish.CALORIC_LEVEL, List<Dish>> dietMeatDishes = new HashMap<>();
+		List<Dish> dietMeat = this.menuService.getMenu()
+				.filter(d -> d.getName().equals("chicken"))
+				.collect(Collectors.toList());
+		dietMeatDishes.put(Dish.CALORIC_LEVEL.DIET, dietMeat);
+
+		// When
+		Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>> dashesGroups =
+				this.menuService.getDishByTypeThenCaloricLevel();
+
+		// Then
+	}
+
+	@Test
+	public void able_To_Group_Dish_Counts_By_Dish_Type() throws Exception {
+
+		// When
+		Map<Dish.Type, Long> dishCounts = this.menuService.getDishCountForType();
+
+		// Then
+		assertThat(dishCounts.get(Dish.Type.MEAT), is(3L));
+		assertThat(dishCounts.get(Dish.Type.FISH), is(2L));
+		assertThat(dishCounts.get(Dish.Type.OTHER), is(4L));
+	}
+
+	@Test
+	public void able_To_Get_Highest_Calories_By_Type() throws Exception {
+
+		// When
+		Map<Dish.Type, Optional<Dish>> highestCaloriesByType =
+				this.menuService.getHighestCaloriesByType();
+
+		Dish fatFish = highestCaloriesByType.get(Dish.Type.FISH)
+				.get();
+
+		// Then
+		assertThat(fatFish.getName(), is("salmon"));
+	}
+
+	@Test
+	public void able_To_Get_One_K_Calories_Dish_By_Type() throws Exception {
+
+		// When
+		Map<Dish.Type, Dish> oneKDishes =
+				this.menuService.getOneKCaloriesByType();
+
+		// Then
+		System.out.println(oneKDishes);
+	}
+
 
 }///:~

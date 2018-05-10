@@ -8,6 +8,7 @@ import com.yuli.bfunctional.j8ia.domain.model.streams.Dish;
 
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -64,5 +65,16 @@ public interface IMenuService {
                             CharSequence suffix);
 	long reducingTotalCalories();
 	Optional<Dish> reducingHighestCaloriesDish();
+	String joinStringsWithReducing();
+
+	Map<Dish.Type, List<Dish>> getDishedByType();
+	Map<Dish.CALORIC_LEVEL, List<Dish>> getDishedByCaloricLevel();
+	Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>>
+	        getDishByTypeThenCaloricLevel();
+
+	Map<Dish.Type, Long> getDishCountForType();
+	Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType();
+	Map<Dish.Type, Dish> getOneKCaloriesByType();
+
 
 }///:~
