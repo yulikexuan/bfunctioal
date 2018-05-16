@@ -6,10 +6,7 @@ package com.yuli.bfunctional.j8ia.domain.services;
 
 import com.yuli.bfunctional.j8ia.domain.model.streams.Dish;
 
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -75,6 +72,14 @@ public interface IMenuService {
 	Map<Dish.Type, Long> getDishCountForType();
 	Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType();
 	Map<Dish.Type, Dish> getOneKCaloriesByType();
+	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
+	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
+	        getCaloricLevelsForEachTypeInHashSet();
 
+	List<Dish> getAllVegetarianDishesByPartitioning();
+	Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
+	Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
+	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
+			int calories);
 
 }///:~

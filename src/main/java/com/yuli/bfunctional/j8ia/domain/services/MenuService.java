@@ -171,25 +171,34 @@ import static java.util.stream.Collectors.*;
  *     Find the highest-calorie dish in each type (not in Optional) P138
  *     Count total calories in each type P138
  *
-
-
+ *     Which CaloricLevels (in a Set) are available in the menu for each type
+ *     of Dish P139
+ *
+ *     Partitioning
+ * 42. You are a vegetarian or have invited a vegetarian friend to have dinner
+ *     with you, you may be interested in partitioning the menu into vegetarian
+ *     and nonvegetarian dishes and then retrieve all the vegetarian dishes P140
+ *
+ *     Achieve the same result of above question by just filtering the stream
+ *     created from the menu List with the same predicate used for partitioning
+ *     and then collecting the result in an additional List P141
+ *
+ * 43. Group the dishes by their type in both of the substreams of vegetarian
+ *     and nonvegetarian dishes resulting from the partitioning previously P141
+ *
+ * 44. Find the most caloric dish among both vegetarian and nonvegetarian
+ *     dishes P141
+ *
+ * 45. Find dishes which have more than 500 calories among both vegetarian and
+ *     nonvegetarian dishes P142
+ *
  *
 Reducing:
-
-Grouping
-
-
-
-Multilevel Grouping
-
-Which CaloricLevels (in a Set) are available in the menu for each type of Dish P139
-Which CaloricLevels (in a HashSet) are available in the menu for each type of Dish P140
-
 Partitioning
-You are a vegetarian or have invited a vegetarian friend to have dinner with you, you may be interested in partitioning the menu into vegetarian and nonvegetarian dishes and then retrieve all the vegetarian dishes P140
-Achieve the same result of above question by just filtering the stream created from the menu List with the same predicate used for partitioning and then collecting the result in an additional List P141
-Group the dishes by their type in both of the substreams of vegetarian and nonvegetarian dishes resulting from the partitioning previously P141
-Find the most caloric dish among both vegetarian and nonvegetarian dishes P141
+
+
+
+
 Find dishes which have more than 500 calories among both vegetarian and nonvegetarian dishes P142
 Find the count of dishes among both vegetarian and nonvegetarian dishes P142
 Write a method accepting as argument an int n and partitioning the first n natural numbers into prime and nonprime P142
@@ -722,6 +731,57 @@ public class MenuService implements IMenuService {
 				collect(groupingBy(Dish::getType,
 						collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
 								Optional::get)));
+	}
+
+	@Override
+	public Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
+			getCaloricLevelsForEachType() {
+
+		return this.menuRepository
+				.getMenu()
+				.collect(groupingBy(Dish::getType,
+						mapping(Dish::getCaloricLevel, toSet())));
+	}
+
+	@Override
+	public Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
+			getCaloricLevelsForEachTypeInHashSet() {
+
+		return this.menuRepository
+				.getMenu()
+				.collect(groupingBy(Dish::getType,
+						mapping(Dish::getCaloricLevel,
+								toCollection(HashSet::new))));
+	}
+
+	@Override
+	public List<Dish> getAllVegetarianDishesByPartitioning() {
+		return this.getMenu()
+				.collect(Collectors.partitioningBy(Dish::isVegetarian))
+				.get(true);
+	}
+
+	@Override
+	public Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType() {
+		return this.getMenu()
+				.collect(partitioningBy(Dish::isVegetarian,
+						groupingBy(Dish::getType)));
+	}
+
+	@Override
+	public Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen() {
+		return this.getMenu()
+				.collect(partitioningBy(Dish::isVegetarian,
+						collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
+								Optional::get)));
+	}
+
+	@Override
+	public Map<Boolean, Map<Boolean, List<Dish>>>
+			getDishHavingSpecificCaloriesAmongVegenAndNonvegen( int calories) {
+
+		return this.getMenu().collect(partitioningBy(Dish::isVegetarian,
+				partitioningBy(d -> d.getCalories() > 500)));
 	}
 
 }///:~
