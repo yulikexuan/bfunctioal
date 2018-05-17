@@ -788,8 +788,7 @@ public class MenuService implements IMenuService {
 
 	@Override
 	public Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int n) {
-		return IntStream
-				.rangeClosed(2, n)
+		return IntStream.rangeClosed(2, n)
 				.boxed()
 				.collect(partitioningBy(
 						candidate -> IMenuService.isPrime(candidate)));
