@@ -81,5 +81,13 @@ public interface IMenuService {
 	Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
 	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
 			int calories);
+	Map<Boolean, Long> getDishCountAmongVegenAndNonVegen();
+	Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int candidate);
+
+	static boolean isPrime(int candidate) {
+		int candidateRoot = (int)Math.sqrt((double)candidate);
+		return IntStream.rangeClosed(2, candidateRoot)
+				.noneMatch(i -> candidate % i == 0);
+	}
 
 }///:~

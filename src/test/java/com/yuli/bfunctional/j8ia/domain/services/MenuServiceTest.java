@@ -867,4 +867,15 @@ public class MenuServiceTest {
 
 	}
 
+	@Test
+	public void is_Able_To_Know_How_Many_Vegen_Dishes_And_Non_Vegen_Dishes_() throws Exception {
+
+		// When
+		Map<Boolean, Long> counts =
+				this.menuService.getDishCountAmongVegenAndNonVegen();
+
+		// Then
+		assertThat(counts.get(true), is(4L));
+	}
+
 }///:~

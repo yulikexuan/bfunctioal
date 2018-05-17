@@ -192,16 +192,11 @@ import static java.util.stream.Collectors.*;
  * 45. Find dishes which have more than 500 calories among both vegetarian and
  *     nonvegetarian dishes P142
  *
+ * 46. Find the count of dishes among both vegetarian and nonvegetarian dishes
+ *     P142
  *
-Reducing:
-Partitioning
-
-
-
-
-Find dishes which have more than 500 calories among both vegetarian and nonvegetarian dishes P142
-Find the count of dishes among both vegetarian and nonvegetarian dishes P142
-Write a method accepting as argument an int n and partitioning the first n natural numbers into prime and nonprime P142
+ * 47. Write a method accepting as argument an int n and partitioning the first
+ *     n natural numbers into prime and nonprime P142
 */
 @Service
 public class MenuService implements IMenuService {
@@ -782,6 +777,22 @@ public class MenuService implements IMenuService {
 
 		return this.getMenu().collect(partitioningBy(Dish::isVegetarian,
 				partitioningBy(d -> d.getCalories() > 500)));
+	}
+
+	@Override
+	public Map<Boolean, Long> getDishCountAmongVegenAndNonVegen() {
+		return this.getMenu()
+				.collect(partitioningBy(Dish::isVegetarian,
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int n) {
+		return IntStream
+				.rangeClosed(2, n)
+				.boxed()
+				.collect(partitioningBy(
+						candidate -> IMenuService.isPrime(candidate)));
 	}
 
 }///:~
