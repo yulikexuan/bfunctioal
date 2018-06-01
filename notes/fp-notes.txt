@@ -132,4 +132,3 @@ The basic concept
     
     - Functional programs are safer in multithreading environments because they
       avoid shared mutable state
-      
