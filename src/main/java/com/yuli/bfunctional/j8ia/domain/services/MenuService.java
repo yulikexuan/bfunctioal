@@ -173,6 +173,7 @@ import static java.util.stream.Collectors.*;
  *
  *     Which CaloricLevels (in a Set) are available in the menu for each type
  *     of Dish P139
+<<<<<<< HEAD
  *
  *     Partitioning
  * 42. You are a vegetarian or have invited a vegetarian friend to have dinner
@@ -202,6 +203,32 @@ Partitioning
 Find dishes which have more than 500 calories among both vegetarian and nonvegetarian dishes P142
 Find the count of dishes among both vegetarian and nonvegetarian dishes P142
 Write a method accepting as argument an int n and partitioning the first n natural numbers into prime and nonprime P142
+=======
+ *
+ *     Partitioning
+ * 42. You are a vegetarian or have invited a vegetarian friend to have dinner
+ *     with you, you may be interested in partitioning the menu into vegetarian
+ *     and nonvegetarian dishes and then retrieve all the vegetarian dishes P140
+ *
+ *     Achieve the same result of above question by just filtering the stream
+ *     created from the menu List with the same predicate used for partitioning
+ *     and then collecting the result in an additional List P141
+ *
+ * 43. Group the dishes by their type in both of the substreams of vegetarian
+ *     and nonvegetarian dishes resulting from the partitioning previously P141
+ *
+ * 44. Find the most caloric dish among both vegetarian and nonvegetarian
+ *     dishes P141
+ *
+ * 45. Find dishes which have more than 500 calories among both vegetarian and
+ *     nonvegetarian dishes P142
+ *
+ * 46. Find the count of dishes among both vegetarian and nonvegetarian dishes
+ *     P142
+ *
+ * 47. Write a method accepting as argument an int n and partitioning the first
+ *     n natural numbers into prime and nonprime P142
+>>>>>>> 951fd4e2cb08667576cbca8e4255f9b859e9f4fd
 */
 @Service
 public class MenuService implements IMenuService {
@@ -784,4 +811,22 @@ public class MenuService implements IMenuService {
 				partitioningBy(d -> d.getCalories() > 500)));
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public Map<Boolean, Long> getDishCountAmongVegenAndNonVegen() {
+		return this.getMenu()
+				.collect(partitioningBy(Dish::isVegetarian,
+						Collectors.counting()));
+	}
+
+	@Override
+	public Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int n) {
+		return IntStream.rangeClosed(2, n)
+				.boxed()
+				.collect(partitioningBy(
+						candidate -> IMenuService.isPrime(candidate)));
+	}
+
+>>>>>>> 951fd4e2cb08667576cbca8e4255f9b859e9f4fd
 }///:~
