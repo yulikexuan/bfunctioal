@@ -63,4 +63,18 @@ public class Dish {
 		return this.getCalories() >= FAT_CALORY_RULE;
 	}
 
+	public CALORIC_LEVEL getCaloricLevel() {
+		if (this.isDiet()) {
+			return CALORIC_LEVEL.DIET;
+		} else if (this.isNormal()) {
+			return CALORIC_LEVEL.NORMAL;
+		} else {
+			return CALORIC_LEVEL.FAT;
+		}
+	}
+
+	public int getCalories() {
+		return this.calories;
+	}
+
 }///:~

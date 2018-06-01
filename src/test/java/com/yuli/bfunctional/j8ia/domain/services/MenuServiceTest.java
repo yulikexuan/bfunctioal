@@ -775,5 +775,96 @@ public class MenuServiceTest {
 		System.out.println(oneKDishes);
 	}
 
+	@Test
+	public void able_To_Know_Which_Caloric_Levels_In_Each_Type() throws Exception {
+
+		Set<Dish.CALORIC_LEVEL> caloricLevelsForMeat =
+				this.menuService.getMenu()
+				        .filter(Dish::isMeat)
+				        .map(Dish::getCaloricLevel)
+				        .collect(Collectors.toSet());
+
+		Set<Dish.CALORIC_LEVEL> caloricLevelsForFish =
+				this.menuService.getMenu()
+						.filter(Dish::isFish)
+						.map(Dish::getCaloricLevel)
+						.collect(Collectors.toSet());
+
+		Set<Dish.CALORIC_LEVEL> caloricLevelsForOther =
+				this.menuService.getMenu()
+						.filter(Dish::isOtherType)
+						.map(Dish::getCaloricLevel)
+						.collect(Collectors.toSet());
+
+		// When
+		Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> levelsForTypes =
+				this.menuService.getCaloricLevelsForEachType();
+
+		Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> levelsForTypesInHashSet =
+				this.menuService.getCaloricLevelsForEachTypeInHashSet();
+
+		// Then
+		assertThat(levelsForTypes, IsMapContaining.hasEntry(Dish.Type.MEAT,
+				caloricLevelsForMeat));
+		assertThat(levelsForTypes, IsMapContaining.hasEntry(Dish.Type.FISH,
+				caloricLevelsForFish));
+		assertThat(levelsForTypes, IsMapContaining.hasEntry(Dish.Type.OTHER,
+				caloricLevelsForOther));
+
+		assertThat(levelsForTypesInHashSet.get(Dish.Type.MEAT),
+				instanceOf(HashSet.class));
+		assertThat(levelsForTypesInHashSet.get(Dish.Type.FISH),
+				instanceOf(HashSet.class));
+		assertThat(levelsForTypesInHashSet.get(Dish.Type.OTHER),
+				instanceOf(HashSet.class));
+
+	}//:End of able_To_Know_Which_Caloric_Levels_In_Each_Type()
+
+	@Test
+	public void able_To_Get_All_Vegetarian_Dishes_By_Partitioning() throws Exception {
+
+		// Givne
+		List<Dish> expectedVegetarianDishes = this.menuService.getMenu()
+				.filter(Dish::isVegetarian)
+				.collect(Collectors.toList());
+
+
+		// When
+		List<Dish> allVegetarianDishes =
+				this.menuService.getAllVegetarianDishesByPartitioning();
+
+		// Then
+		assertThat(allVegetarianDishes, equalTo(expectedVegetarianDishes));
+	}
+
+	@Test
+	public void able_To_Get_All_Vegetarian_Dishes_By_Type() throws Exception {
+
+		// Given
+
+		// When
+		Map<Boolean, Map<Dish.Type, List<Dish>>> dishesByType =
+				this.menuService.getVegetarianDishesByType();
+
+		// Then
+		assertThat(dishesByType.get(true).get(Dish.Type.MEAT), nullValue());
+	}
+
+	@Test
+	public void able_To_Know_The_Most_Caloric_Dish_Among_Vegens_And_Non_Vegens() throws Exception {
+
+		// When
+		Map<Boolean, Dish> mostCaloricDishes = this.menuService
+				.getTheMostCaloricDishAmongBothVegenAndNonvegen();
+
+		// Then
+		assertThat(mostCaloricDishes.get(true).getName(), is("pizza"));
+		assertThat(mostCaloricDishes.get(false).getName(), is("pork"));
+	}
+
+	@Test
+	public void able_To_Get_Dishes_Having_More_Than_500_Calories_Among_Vegen_And_Non_Vegen() throws Exception {
+
+	}
 
 }///:~
