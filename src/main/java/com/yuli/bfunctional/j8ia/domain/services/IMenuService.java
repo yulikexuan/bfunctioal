@@ -125,24 +125,12 @@ public interface IMenuService {
 	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
 	        getCaloricLevelsForEachTypeInHashSet();
 
-<<<<<<< HEAD
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
-
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
-	getCaloricLevelsForEachTypeInHashSet();
-
 	List<Dish> getAllVegetarianDishesByPartitioning();
 
 	Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
 
 	Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
 
-	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
-			int calories);
-=======
-	List<Dish> getAllVegetarianDishesByPartitioning();
-	Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
-	Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
 	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
 			int calories);
 	Map<Boolean, Long> getDishCountAmongVegenAndNonVegen();
@@ -153,6 +141,5 @@ public interface IMenuService {
 		return IntStream.rangeClosed(2, candidateRoot)
 				.noneMatch(i -> candidate % i == 0);
 	}
->>>>>>> 951fd4e2cb08667576cbca8e4255f9b859e9f4fd
 
 }///:~
