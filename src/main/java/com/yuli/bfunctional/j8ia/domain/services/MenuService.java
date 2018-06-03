@@ -811,8 +811,6 @@ public class MenuService implements IMenuService {
 				partitioningBy(d -> d.getCalories() > 500)));
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public Map<Boolean, Long> getDishCountAmongVegenAndNonVegen() {
 		return this.getMenu()
@@ -828,5 +826,4 @@ public class MenuService implements IMenuService {
 						candidate -> IMenuService.isPrime(candidate)));
 	}
 
->>>>>>> 951fd4e2cb08667576cbca8e4255f9b859e9f4fd
 }///:~

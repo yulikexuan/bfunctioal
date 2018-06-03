@@ -121,16 +121,12 @@ public interface IMenuService {
 	Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType();
 
 	Map<Dish.Type, Dish> getOneKCaloriesByType();
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
-	        getCaloricLevelsForEachTypeInHashSet();
-
-<<<<<<< HEAD
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
 
 	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
 	getCaloricLevelsForEachTypeInHashSet();
 
+	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
+
 	List<Dish> getAllVegetarianDishesByPartitioning();
 
 	Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
@@ -139,20 +135,15 @@ public interface IMenuService {
 
 	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
 			int calories);
-=======
-	List<Dish> getAllVegetarianDishesByPartitioning();
-	Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
-	Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
-	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
-			int calories);
+
 	Map<Boolean, Long> getDishCountAmongVegenAndNonVegen();
+
 	Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int candidate);
 
 	static boolean isPrime(int candidate) {
-		int candidateRoot = (int)Math.sqrt((double)candidate);
+		int candidateRoot = (int) Math.sqrt((double) candidate);
 		return IntStream.rangeClosed(2, candidateRoot)
 				.noneMatch(i -> candidate % i == 0);
 	}
->>>>>>> 951fd4e2cb08667576cbca8e4255f9b859e9f4fd
 
 }///:~

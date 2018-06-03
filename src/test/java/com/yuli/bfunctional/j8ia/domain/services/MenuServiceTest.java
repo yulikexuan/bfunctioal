@@ -866,8 +866,6 @@ public class MenuServiceTest {
 	public void able_To_Get_Dishes_Having_More_Than_500_Calories_Among_Vegen_And_Non_Vegen() throws Exception {
 
 	}
-<<<<<<< HEAD
-=======
 
 	@Test
 	public void is_Able_To_Know_How_Many_Vegen_Dishes_And_Non_Vegen_Dishes_() throws Exception {
@@ -879,6 +877,5 @@ public class MenuServiceTest {
 		// Then
 		assertThat(counts.get(true), is(4L));
 	}
->>>>>>> 951fd4e2cb08667576cbca8e4255f9b859e9f4fd
 
 }///:~
