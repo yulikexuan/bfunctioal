@@ -4,14 +4,21 @@
 package com.yuli.bfunctional.j8ia.domain.model.async;
 
 
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
+
 
 public interface IShop {
 
 	ThreadLocalRandom TLR = ThreadLocalRandom.current();
 
+	String UNAVAILABLE_PRODUCT = "iPhone XI";
+
+	String getName();
 	double calculatePrice(String product);
 	double getPrice(String product);
+
+	Future<Double> getPriceAsync(String product);
 
 	static void delay() {
 		try {
