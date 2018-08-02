@@ -4,6 +4,7 @@
 package com.yuli.bfunctional.j8ia.domain.model.async;
 
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -19,6 +20,7 @@ public interface IShop {
 	double getPrice(String product);
 
 	Future<Double> getPriceAsync(String product);
+    Future<Double> getPriceAsync(String product, Executor executor);
 
 	static void delay() {
 		try {
