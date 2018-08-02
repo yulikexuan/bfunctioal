@@ -147,7 +147,8 @@ public class ShopTest {
         List<CompletableFuture<String>> priceFutures = this.shops.stream()
                 .map(s -> CompletableFuture.supplyAsync(
                         () -> String.format("%s price is %.2f", s.getName(),
-                                s.getPrice(this.availableProduct))))
+                                s.getPrice(this.availableProduct)),
+                        this.provideExecutor()))
                 .collect(Collectors.toList());
 
         // When
@@ -163,16 +164,19 @@ public class ShopTest {
         System.out.printf("Done in %d msecs.", duration);
     }
 
+    static final int THREAD_LIMIT = 100;
+
     private Executor provideExecutor() {
         int shopSize = this.shops.size();
-        int threadPoolSize = Math.min(shopSize, 100);
-        return Executors.newFixedThreadPool(threadPoolSize, new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r);
-                t.setDaemon(true);
-                return t;
-            }
+        int threadPoolSize = Math.min(shopSize, THREAD_LIMIT);
+        return Executors.newFixedThreadPool(threadPoolSize,
+                new ThreadFactory() {
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        Thread t = new Thread(r);
+                        t.setDaemon(true);
+                        return t;
+                    }
         });
     }
 
