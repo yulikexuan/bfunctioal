@@ -4,12 +4,15 @@
 package com.yuli.bfunctional.j8ia.domain.model.async;
 
 
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 
 
 public class Shop implements IShop {
+
+    static final Random RANDOM = new Random(System.currentTimeMillis());
 
     private final String name;
 
@@ -37,7 +40,17 @@ public class Shop implements IShop {
 		return calculatePrice(product);
 	}
 
-	@Override
+    @Override
+    public String getPriceQuote(String product) {
+
+        double price = this.calculatePrice(product);
+        Discount.Code code = Discount.Code.values()[
+                RANDOM.nextInt(Discount.Code.values().length)];
+
+        return String.format("%s:%.2f:%s", this.name, price, code);
+    }
+
+    @Override
 	public Future<Double> getPriceAsync(String product) {
         return CompletableFuture.supplyAsync(() -> this.calculatePrice(product));
 	}

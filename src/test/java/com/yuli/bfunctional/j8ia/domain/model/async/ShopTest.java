@@ -180,4 +180,52 @@ public class ShopTest {
         });
     }
 
+    @Test
+    public void able_To_List_Final_Price_With_Discount_Sequentially() throws Exception {
+
+        // Given
+        long startTime = System.nanoTime();
+
+        // When
+        List<String> finalPrices = this.shops.stream()
+                .map(s -> s.getPriceQuote(this.availableProduct))
+                .map(Quote::parse)
+                .map(Discount::applyDiscount)
+                .collect(Collectors.toList());
+
+        long duration = (System.nanoTime() - startTime)  / 1_000_000;
+
+        // Tnen
+        System.out.println(finalPrices);
+        System.out.printf("Done in %d msecs.%n", duration);
+    }
+
+    @Test
+    public void able_To_List_Final_Price_With_Discount_Asynchronously() throws Exception {
+
+        // Given
+        long startTime = System.nanoTime();
+
+        final Executor executor = this.provideExecutor();
+
+        List<CompletableFuture<String>> priceFutures = this.shops.stream()
+                .map(s -> CompletableFuture.supplyAsync(
+                        () -> s.getPriceQuote(this.availableProduct), executor))
+                .map(f -> f.thenApply(Quote::parse))
+                .map(f -> f.thenCompose(q -> CompletableFuture.supplyAsync(
+                        () -> Discount.applyDiscount(q), executor)))
+                .collect(Collectors.toList());
+
+        // When
+        List<String> finalPrices = priceFutures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+
+        long duration = (System.nanoTime() - startTime) / 1_000_000;
+
+        // Then
+        System.out.println(finalPrices);
+        System.out.printf("Done in %d msecs. %n", duration);
+    }
+
 }///:~

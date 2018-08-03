@@ -19,6 +19,8 @@ public interface IShop {
 	double calculatePrice(String product);
 	double getPrice(String product);
 
+	String getPriceQuote(String product);
+
 	Future<Double> getPriceAsync(String product);
     Future<Double> getPriceAsync(String product, Executor executor);
 
