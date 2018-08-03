@@ -170,14 +170,19 @@ public class ShopTest {
         int shopSize = this.shops.size();
         int threadPoolSize = Math.min(shopSize, THREAD_LIMIT);
         return Executors.newFixedThreadPool(threadPoolSize,
-                new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        Thread t = new Thread(r);
-                        t.setDaemon(true);
-                        return t;
-                    }
-        });
+                r -> {
+                    Thread t = new Thread(r);
+                    t.setDaemon(true);
+                    return t;
+                });
+//                new ThreadFactory() {
+//                    @Override
+//                    public Thread newThread(Runnable r) {
+//                        Thread t = new Thread(r);
+//                        t.setDaemon(true);
+//                        return t;
+//                    }
+//        });
     }
 
     @Test
@@ -269,7 +274,7 @@ public class ShopTest {
         List<CompletableFuture<Double>> priceFutures = this.shops.stream()
                 .map(s -> CompletableFuture.supplyAsync(
                         () -> s.getPrice(this.availableProduct), executor))
-                .map(cf -> cf.thenCombineAsync(
+                .map(cf -> cf.thenCombine(
                         CompletableFuture.supplyAsync(
                                 () -> ExchangeService.getRate(
                                         ExchangeService.Money.EUR,
