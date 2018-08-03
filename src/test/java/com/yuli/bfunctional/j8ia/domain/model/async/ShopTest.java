@@ -34,7 +34,7 @@ public class ShopTest {
 	public void setUp() throws Exception {
 
         int cores = Runtime.getRuntime().availableProcessors();
-        System.out.printf("There are %1$d cores available.", cores);
+        System.out.printf("There are %1$d cores available. %n", cores);
 
 	    this.availableProduct = "iPhone X";
 	    this.unavailableProduct = IShop.UNAVAILABLE_PRODUCT;
@@ -225,6 +225,37 @@ public class ShopTest {
 
         // Then
         System.out.println(finalPrices);
+        System.out.printf("Done in %d msecs. %n", duration);
+    }
+
+    @Test
+    public void able_To_List_USD_Prices_From_EUR_Prices() throws Exception {
+
+        // Given
+        long startTime = System.nanoTime();
+
+        final Executor executor = this.provideExecutor();
+
+        List<CompletableFuture<Double>> priceFutures = this.shops.stream()
+                .map(s -> CompletableFuture.supplyAsync(
+                        () -> s.getPrice(this.availableProduct), executor))
+                .map(cf -> cf.thenCombineAsync(
+                        CompletableFuture.supplyAsync(
+                                () -> ExchangeService.getRate(
+                                        ExchangeService.Money.EUR,
+                                        ExchangeService.Money.USD)),
+                        (price, rate) -> price * rate))
+                .collect(Collectors.toList());
+
+        // When
+        List<Double> prices = priceFutures.stream()
+                .map(CompletableFuture::join)
+                .collect(Collectors.toList());
+
+        long duration = (System.nanoTime() - startTime) / 1_000_000;
+
+        // Then
+        System.out.println(prices);
         System.out.printf("Done in %d msecs. %n", duration);
     }
 
