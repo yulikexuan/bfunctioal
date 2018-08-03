@@ -32,7 +32,6 @@ public class Shop implements IShop {
             throw new RuntimeException("The product is unavailable.");
         }
 		double price = TLR.nextDouble() * product.charAt(3) + product.charAt(1);
-        System.out.println(price);
 		return price;
 	}
 

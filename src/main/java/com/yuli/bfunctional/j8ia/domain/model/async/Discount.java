@@ -41,8 +41,11 @@ public class Discount {
     }
 
     private static void delay() {
+
+        int delay = 500 + IShop.TLR.nextInt(2000);
+
         try {
-            Thread.sleep(1000L);
+            Thread.sleep(delay);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

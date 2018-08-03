@@ -229,6 +229,36 @@ public class ShopTest {
     }
 
     @Test
+    public void able_To_List_Final_Price_With_Discount_Reactively() throws Exception {
+
+        // Given
+        long startTime = System.nanoTime();
+
+        final Executor executor = this.provideExecutor();
+
+        List<CompletableFuture<String>> priceFutures = this.shops.stream()
+                .map(s -> CompletableFuture.supplyAsync(
+                        () -> s.getPriceQuote(this.availableProduct), executor))
+                .map(f -> f.thenApply(Quote::parse))
+                .map(f -> f.thenCompose(q -> CompletableFuture.supplyAsync(
+                        () -> Discount.applyDiscount(q), executor)))
+                .collect(Collectors.toList());
+
+        // When
+        CompletableFuture[] cfs = priceFutures.stream()
+                .map(f -> f.thenAccept(System.out::println))
+                .toArray(s -> new CompletableFuture[s]);
+
+        CompletableFuture.allOf(cfs).join();
+
+        long duration = (System.nanoTime() - startTime) / 1_000_000;
+
+        // Then
+        System.out.printf("All shops have now responded in %d msecs.", duration);
+    }
+
+
+    @Test
     public void able_To_List_USD_Prices_From_EUR_Prices() throws Exception {
 
         // Given
