@@ -21,9 +21,7 @@ public class Discount {
         }
     }
 
-    private static final DecimalFormat PRICE_FORMAT =
-            new DecimalFormat("#.##",
-                    new DecimalFormatSymbols(Locale.US));
+    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
 
     public static String applyDiscount(Quote quote) {
 
@@ -31,12 +29,9 @@ public class Discount {
 
         synchronized (PRICE_FORMAT) {
 
-            double finalPrice = new Double(PRICE_FORMAT.format(
-                    quote.getPrice() * (100 -
-                            quote.getDiscountCode().percentage) / 100));
+            double finalPrice = new Double(PRICE_FORMAT.format(quote.getPrice() * (100 - quote.getDiscountCode().percentage) / 100));
 
-            return String.format("%s price is %.2f", quote.getShopName(),
-                    finalPrice);
+            return String.format("%s price is %.2f", quote.getShopName(), finalPrice);
         }
     }
 

@@ -3,4 +3,5 @@
 
 package com.yuli.bfunctional.j8ia.domain.model.generics;
 
-public class E2 extends D1 {}///:~
+public class E2 extends D1 {
+}///:~

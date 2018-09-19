@@ -14,14 +14,14 @@ import java.util.Optional;
 @NoArgsConstructor
 public class Person {
 
-	private Car car;
+    private Car car;
 
-	public Person(Car car) {
-		this.car = car;
-	}
+    public Person(Car car) {
+        this.car = car;
+    }
 
-	public Optional<Car> getCarAsOptional() {
-		return Optional.ofNullable(this.car);
-	}
+    public Optional<Car> getCarAsOptional() {
+        return Optional.ofNullable(this.car);
+    }
 
 }///:~

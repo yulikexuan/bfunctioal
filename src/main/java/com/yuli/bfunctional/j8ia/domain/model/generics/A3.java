@@ -3,4 +3,5 @@
 
 package com.yuli.bfunctional.j8ia.domain.model.generics;
 
-public interface A3 {}///:~
+public interface A3 {
+}///:~

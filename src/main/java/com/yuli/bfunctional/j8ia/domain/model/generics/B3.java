@@ -3,4 +3,5 @@
 
 package com.yuli.bfunctional.j8ia.domain.model.generics;
 
-public interface B3 extends A3, A4 {}///:~
+public interface B3 extends A3, A4 {
+}///:~

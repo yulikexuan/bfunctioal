@@ -18,59 +18,56 @@ import static org.junit.Assert.*;
 
 public class InsuranceServiceTest {
 
-	private Optional<Person> optPerson;
-	private Optional<Car> optCar;
+    private Optional<Person> optPerson;
+    private Optional<Car> optCar;
 
-	private InsuranceService insuranceService;
+    private InsuranceService insuranceService;
 
-	@Before
-	public void setUp() throws Exception {
-		this.insuranceService = new InsuranceService();
-	}
+    @Before
+    public void setUp() throws Exception {
+        this.insuranceService = new InsuranceService();
+    }
 
-	@Test
-	public void test_On_Empty_Car() throws Exception {
+    @Test
+    public void test_On_Empty_Car() throws Exception {
 
-		// Given
-		this.optCar = Optional.empty();
-		this.optPerson = Optional.of(new Person());
+        // Given
+        this.optCar = Optional.empty();
+        this.optPerson = Optional.of(new Person());
 
-		// when
-		Optional<Insurance> optIns = this.insuranceService.getCheapestInsurance(
-				this.optPerson, this.optCar);
+        // when
+        Optional<Insurance> optIns = this.insuranceService.getCheapestInsurance(this.optPerson, this.optCar);
 
-		// Then
-		assertThat(optIns.isPresent(), is(false));
-	}
+        // Then
+        assertThat(optIns.isPresent(), is(false));
+    }
 
-	@Test
-	public void test_On_Empty_Person() throws Exception {
+    @Test
+    public void test_On_Empty_Person() throws Exception {
 
-		// Given
-		this.optCar = Optional.of(new Car());
-		this.optPerson = Optional.empty();
+        // Given
+        this.optCar = Optional.of(new Car());
+        this.optPerson = Optional.empty();
 
-		// when
-		Optional<Insurance> optIns = this.insuranceService.getCheapestInsurance(
-				this.optPerson, this.optCar);
+        // when
+        Optional<Insurance> optIns = this.insuranceService.getCheapestInsurance(this.optPerson, this.optCar);
 
-		// Then
-		assertThat(optIns.isPresent(), is(false));
-	}
+        // Then
+        assertThat(optIns.isPresent(), is(false));
+    }
 
-	@Test
-	public void able_To_Get_Cheapest_Insurance() throws Exception {
+    @Test
+    public void able_To_Get_Cheapest_Insurance() throws Exception {
 
-		// Given
-		this.optCar = Optional.of(new Car());
-		this.optPerson = Optional.of(new Person());
+        // Given
+        this.optCar = Optional.of(new Car());
+        this.optPerson = Optional.of(new Person());
 
-		// when
-		Optional<Insurance> optIns = this.insuranceService.getCheapestInsurance(
-				this.optPerson, this.optCar);
+        // when
+        Optional<Insurance> optIns = this.insuranceService.getCheapestInsurance(this.optPerson, this.optCar);
 
-		// Then
-		assertThat(optIns.get().getName(), is("CheapInc"));
-	}
+        // Then
+        assertThat(optIns.get().getName(), is("CheapInc"));
+    }
 
 }///:~

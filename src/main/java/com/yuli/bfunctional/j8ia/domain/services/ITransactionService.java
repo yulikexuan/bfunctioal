@@ -29,14 +29,22 @@ Create multilevel groupings such as grouping transactions by cities and then fur
 */
 public interface ITransactionService {
 
-	Stream<Transaction> getAllTransactions();
-	List<String> getAllUniqueCities();
-	List<Transaction> getAllSortedTransactionsIn2011();
+    Stream<Transaction> getAllTransactions();
+
+    List<String> getAllUniqueCities();
+
+    List<Transaction> getAllSortedTransactionsIn2011();
+
     List<Trader> getAllSortedTradersFromCambridge();
-	String getAllTradersNames();
-	Trader getAnyTraderBasedInMilan();
-	List<Integer> getAllTransactionValuesFromCambridge();
-	int getTheHeightestValue();
-	Transaction getTransactionWithSmallestValue();
+
+    String getAllTradersNames();
+
+    Trader getAnyTraderBasedInMilan();
+
+    List<Integer> getAllTransactionValuesFromCambridge();
+
+    int getTheHeightestValue();
+
+    Transaction getTransactionWithSmallestValue();
 
 }///:~

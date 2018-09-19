@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class PracticeBootstrap implements
-        ApplicationListener<ContextRefreshedEvent> {
+public class PracticeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private final PuttingIntoPractice puttingIntoPractice;
 
@@ -25,8 +24,7 @@ public class PracticeBootstrap implements
     }
 
     @Override
-    public void onApplicationEvent(
-            ContextRefreshedEvent contextRefreshedEvent) {
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
 
         this.puttingIntoPractice.query_1();
     }

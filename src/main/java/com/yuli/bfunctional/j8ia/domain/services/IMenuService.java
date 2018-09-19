@@ -13,137 +13,131 @@ import java.util.stream.Stream;
 
 public interface IMenuService {
 
-	Stream<Dish> getMenu();
+    Stream<Dish> getMenu();
 
-	List<String> getLowCaloryDishNames();
+    List<String> getLowCaloryDishNames();
 
-	List<String> getAllVegetarianDishes();
+    List<String> getAllVegetarianDishes();
 
-	List<String> getFirstThree300CalDishes();
+    List<String> getFirstThree300CalDishes();
 
-	List<String> getAll300CalDishesExceptFirstTwo();
+    List<String> getAll300CalDishesExceptFirstTwo();
 
-	List<String> getFirstTwoMeatDishes();
+    List<String> getFirstTwoMeatDishes();
 
-	List<String> getAllDishNames();
+    List<String> getAllDishNames();
 
-	List<Integer> countWordLength(List<String> words);
+    List<Integer> countWordLength(List<String> words);
 
-	List<String> getUniqueCharactors(List<String> words);
+    List<String> getUniqueCharactors(List<String> words);
 
-	int[] getSquares(int[] numbers);
+    int[] getSquares(int[] numbers);
 
-	int[] filterEvenNumbers(int max);
+    int[] filterEvenNumbers(int max);
 
-	List<int[]> getAllPairs(int[] nums1, int[] nums2);
+    List<int[]> getAllPairs(int[] nums1, int[] nums2);
 
-	List<int[]> getAdvancedPairs(int[] nums1, int[] nums2);
+    List<int[]> getAdvancedPairs(int[] nums1, int[] nums2);
 
-	boolean hasVegetarianDish();
+    boolean hasVegetarianDish();
 
-	boolean hasHealthyDish();
+    boolean hasHealthyDish();
 
-	boolean isHealthyMenu();
+    boolean isHealthyMenu();
 
-	Dish getAnyVegetarianDish();
+    Dish getAnyVegetarianDish();
 
-	int firstSquareDivisibleBy3(IntStream data);
+    int firstSquareDivisibleBy3(IntStream data);
 
-	int getTotalCalories();
+    int getTotalCalories();
 
-	int getTheHeightestCalories();
+    int getTheHeightestCalories();
 
-	int getTheLowestCalories();
+    int getTheLowestCalories();
 
-	Dish getTheHighestCalorieDish();
+    Dish getTheHighestCalorieDish();
 
-	Dish getTheLowestCalorieDish();
+    Dish getTheLowestCalorieDish();
 
-	int getDishCount();
+    int getDishCount();
 
-	int getCaloriesSum();
+    int getCaloriesSum();
 
-	int getMaxCalories();
+    int getMaxCalories();
 
-	int[] getEvenNumbers();
+    int[] getEvenNumbers();
 
-	Stream<double[]> getPythagoreanTriples();
+    Stream<double[]> getPythagoreanTriples();
 
-	double getPythagoreanSqrt(int a, int b);
+    double getPythagoreanSqrt(int a, int b);
 
-	Stream<String> getStringFromStreamOf();
+    Stream<String> getStringFromStreamOf();
 
-	Stream<String> getEmptyStream();
+    Stream<String> getEmptyStream();
 
-	IntStream convertToIntStream(int[] arr);
+    IntStream convertToIntStream(int[] arr);
 
-	long getNumberOfUniqueWordsFromFile(String fileName);
+    long getNumberOfUniqueWordsFromFile(String fileName);
 
-	int[] getEvenNumbersWithIteration(int count);
+    int[] getEvenNumbersWithIteration(int count);
 
-	List<Integer> getFibonaccis(int count);
+    List<Integer> getFibonaccis(int count);
 
-	double[] getDoubleRandom(int count);
+    double[] getDoubleRandom(int count);
 
-	int[] getArrayOfOne(int count);
+    int[] getArrayOfOne(int count);
 
-	long getNumberOfDishes();
+    long getNumberOfDishes();
 
-	Optional<Dish> collectHighestCaloriesDish();
+    Optional<Dish> collectHighestCaloriesDish();
 
-	Optional<Dish> collectLowestCaloriesDish();
+    Optional<Dish> collectLowestCaloriesDish();
 
-	int collectTotalCalories();
+    int collectTotalCalories();
 
-	double collectAverageOfCalories();
+    double collectAverageOfCalories();
 
-	IntSummaryStatistics collectStatistsiceOfCalories();
+    IntSummaryStatistics collectStatistsiceOfCalories();
 
-	String collectDishNames(CharSequence delimiter,
-	                        CharSequence prefix,
-	                        CharSequence suffix);
+    String collectDishNames(CharSequence delimiter, CharSequence prefix, CharSequence suffix);
 
-	long reducingTotalCalories();
+    long reducingTotalCalories();
 
-	Optional<Dish> reducingHighestCaloriesDish();
+    Optional<Dish> reducingHighestCaloriesDish();
 
-	String joinStringsWithReducing();
+    String joinStringsWithReducing();
 
-	Map<Dish.Type, List<Dish>> getDishedByType();
+    Map<Dish.Type, List<Dish>> getDishedByType();
 
-	Map<Dish.CALORIC_LEVEL, List<Dish>> getDishedByCaloricLevel();
+    Map<Dish.CALORIC_LEVEL, List<Dish>> getDishedByCaloricLevel();
 
-	Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>>
-	getDishByTypeThenCaloricLevel();
+    Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>> getDishByTypeThenCaloricLevel();
 
-	Map<Dish.Type, Long> getDishCountForType();
+    Map<Dish.Type, Long> getDishCountForType();
 
-	Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType();
+    Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType();
 
-	Map<Dish.Type, Dish> getOneKCaloriesByType();
+    Map<Dish.Type, Dish> getOneKCaloriesByType();
 
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
-	getCaloricLevelsForEachTypeInHashSet();
+    Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachTypeInHashSet();
 
-	Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
+    Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType();
 
-	List<Dish> getAllVegetarianDishesByPartitioning();
+    List<Dish> getAllVegetarianDishesByPartitioning();
 
-	Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
+    Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType();
 
-	Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
+    Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen();
 
-	Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(
-			int calories);
+    Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(int calories);
 
-	Map<Boolean, Long> getDishCountAmongVegenAndNonVegen();
+    Map<Boolean, Long> getDishCountAmongVegenAndNonVegen();
 
-	Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int candidate);
+    Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int candidate);
 
-	static boolean isPrime(int candidate) {
-		int candidateRoot = (int) Math.sqrt((double) candidate);
-		return IntStream.rangeClosed(2, candidateRoot)
-				.noneMatch(i -> candidate % i == 0);
-	}
+    static boolean isPrime(int candidate) {
+        int candidateRoot = (int) Math.sqrt((double) candidate);
+        return IntStream.rangeClosed(2, candidateRoot).noneMatch(i -> candidate % i == 0);
+    }
 
 }///:~

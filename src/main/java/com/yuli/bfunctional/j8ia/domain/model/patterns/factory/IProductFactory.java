@@ -5,6 +5,6 @@ package com.yuli.bfunctional.j8ia.domain.model.patterns.factory;
 
 public interface IProductFactory {
 
-	IFinanceProduct createProduct(String name);
+    IFinanceProduct createProduct(String name);
 
 }///:~

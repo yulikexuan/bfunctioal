@@ -10,16 +10,16 @@ import java.util.List;
 
 public class Feed implements ISubject<String> {
 
-	private final List<IObserver<String>> observers = new ArrayList<>();
+    private final List<IObserver<String>> observers = new ArrayList<>();
 
-	@Override
-	public void registerObserver(IObserver<String> o) {
-		this.observers.add(o);
-	}
+    @Override
+    public void registerObserver(IObserver<String> o) {
+        this.observers.add(o);
+    }
 
-	@Override
-	public void notifyObservers(String tweets) {
-		this.observers.forEach(o -> o.notify(tweets));
-	}
+    @Override
+    public void notifyObservers(String tweets) {
+        this.observers.forEach(o -> o.notify(tweets));
+    }
 
 }///:~

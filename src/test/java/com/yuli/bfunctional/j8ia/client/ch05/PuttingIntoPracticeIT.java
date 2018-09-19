@@ -56,8 +56,7 @@ public class PuttingIntoPracticeIT {
 
         // Then
         assertThat(cities.size(), is(3));
-        assertThat(cities, containsInAnyOrder("Roma", "Milan",
-                "Cambridge"));
+        assertThat(cities, containsInAnyOrder("Roma", "Milan", "Cambridge"));
     }
 
     @Test

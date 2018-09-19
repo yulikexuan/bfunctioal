@@ -233,597 +233,450 @@ Write a method accepting as argument an int n and partitioning the first n natur
 @Service
 public class MenuService implements IMenuService {
 
-	private final IMenuRepository menuRepository;
-
-	@Autowired
-	public MenuService(IMenuRepository menuRepository) {
-		this.menuRepository = menuRepository;
-	}
-
-	@Override
-	public Stream<Dish> getMenu() {
-		return this.menuRepository.getMenu();
-	}
-
-	@Override
-	public List<String> getLowCaloryDishNames() {
-
-		return this.getMenu()
-				.filter(Dish::hasLowCalory)
-				.sorted(comparingInt(Dish::getCalories))
-				.map(d -> d.getName())
-				.collect(toList());
-	}
-
-	@Override
-	public List<String> getAllVegetarianDishes() {
-		return this.getMenu()
-				.filter(Dish::isVegetarian)
-				.map(Dish::getName)
-				.collect(toList());
-	}
-
-	@Override
-	public List<String> getFirstThree300CalDishes() {
-		return this.getMenu()
-				.filter(d -> d.getCalories() > 300)
-				.limit(3)
-				.map(Dish::getName)
-				.collect(toList());
-	}
-
-	@Override
-	public List<String> getAll300CalDishesExceptFirstTwo() {
-
-		return this.getMenu()
-				.filter(d -> d.getCalories() > 300)
-				.skip(2)
-				.map(Dish::getName)
-				.collect(toList());
-	}
-
-	@Override
-	public List<String> getFirstTwoMeatDishes() {
-		return this.getMenu()
-				.filter(Dish::isMeat)
-				.limit(2)
-				.map(Dish::getName)
-				.collect(toList());
-	}
-
-	@Override
-	public List<String> getAllDishNames() {
-		return this.getMenu()
-				.map(Dish::getName)
-				.collect(toList());
-	}
-
-	@Override
-	public List<Integer> countWordLength(List<String> words) {
-
-		if (words == null) {
-			return new ArrayList<>();
-		}
-
-		return words.stream()
-				.map(String::length)
-				.collect(toList());
-	}
-
-	@Override
-	public List<String> getUniqueCharactors(List<String> words) {
-
-		if (words == null) {
-			return new ArrayList<>();
-		}
-
-		return words.stream()
-				.map(w -> w.split(""))
-				.flatMap(Arrays::stream) // To avoid Stream<Stream<String>>
-				.distinct()
-				.collect(toList());
-	}
-
-	@Override
-	public int[] getSquares(int[] numbers) {
-		return Arrays.stream(numbers)
-				.map(i -> i * i)
-				.toArray();
-	}
-
-	@Override
-	public int[] filterEvenNumbers(int max) {
-
-		if (max > 100) {
-			System.out.println("Too many numbers to produce!");
-			return new int[0];
-		}
-
-		return IntStream.rangeClosed(0, max)
-				.filter(i -> i % 2 == 0)
-				.toArray();
-	}
-
-	@Override
-	public List<int[]> getAllPairs(int[] nums1, int[] nums2) {
-
-		if ((nums1 == null) || (nums2 == null)) {
-			return new ArrayList<>();
-		}
-
-		return Arrays.stream(nums1)
-				.boxed()
-				.flatMap(n1 -> Arrays.stream(nums2)
-						.boxed()
-						.map(n2 -> new int[] {n1, n2}))
-				.collect(toList());
-	}
-
-	@Override
-	public List<int[]> getAdvancedPairs(int[] nums1, int[] nums2) {
-		if ((nums1 == null) || (nums2 == null)) {
-			return new ArrayList<>();
-		}
-
-		return Arrays.stream(nums1)
-				.boxed()
-				.flatMap(n1 -> Arrays.stream(nums2)
-						.boxed()
-						.filter(n2 -> (n2 + n1) % 3 == 0)
-						.map(n2 -> new int[] {n1, n2}))
-				.collect(toList());
-	}
-
-	@Override
-	public boolean hasVegetarianDish() {
-		return this.getMenu()
-				.anyMatch(Dish::isVegetarian);
-	}
-
-	/*
-	 * Find out whether the menu is healthy (that is, all dishes are below 1000
-	 * calories)
-	 */
-	@Override
-	public boolean hasHealthyDish() {
-		return this.getMenu().anyMatch(Dish::isHealthy);
-	}
-
-	@Override
-	public Dish getAnyVegetarianDish() throws RuntimeException {
-		return this.getMenu()
-				.filter(Dish::isVegetarian)
-				.findAny()
-				.orElseThrow(RuntimeException::new);
-	}
-
-	@Override
-	public boolean isHealthyMenu() {
-//		return this.getMenu()
-//				.allMatch(Dish::isHealthy);
-		return this.getMenu()
-				.noneMatch(d -> d.getCalories() >= 1000);
-	}
-
-	@Override
-	public int firstSquareDivisibleBy3(IntStream data) {
-
-		return data
-				.filter(i -> (i * i) % 3 == 0)
-				.findFirst()
-				.getAsInt();
-	}
-
-	@Override
-	public int getTotalCalories() {
-//		return this.getMenu()
-//				.mapToInt(Dish::getCalories)
-//				.reduce(0, Integer::sum);
-
-		return this.getMenu()
-				.mapToInt(Dish::getCalories)
-				.sum();
-	}
-
-	@Override
-	public Dish getTheHighestCalorieDish() {
-//		return this.getMenu()
-//				.reduce((d1, d2) ->
-//						d1.getCalories() > d2.getCalories() ? d1 : d2)
-//				.get();
-		return this.getMenu()
-				.max(Comparator.comparing(Dish::getCalories))
-				.get();
-	}
-
-	@Override
-	public Dish getTheLowestCalorieDish() {
-//		return this.getMenu()
-//				.reduce((d1, d2) ->
-//						d1.getCalories() < d2.getCalories() ? d1 : d2)
-//				.get();
-		return this.getMenu()
-				.min(Comparator.comparing(Dish::getCalories))
-				.get();
-	}
-
-	@Override
-	public int getDishCount() {
-		return this.getMenu()
-				.mapToInt(d -> 1)
-				.reduce(0, Integer::sum);
-	}
-
-	@Override
-	public int getTheHeightestCalories() {
-		return this.getMenu()
-				.mapToInt(Dish::getCalories)
-				.reduce(Integer::max)
-				.getAsInt();
-	}
-
-	@Override
-	public int getTheLowestCalories() {
-		return this.getMenu()
-				.mapToInt(Dish::getCalories)
-				.reduce(Integer::min)
-				.getAsInt();
-	}
-
-	@Override
-	public int getCaloriesSum() {
-		return this.getMenu()
-				.mapToInt(Dish::getCalories)
-				.sum();
-	}
-
-	@Override
-	public int getMaxCalories() {
-		return this.getMenu()
-				.mapToInt(Dish::getCalories)
-				.max()
-				.getAsInt();
-	}
-
-	@Override
-	public int[] getEvenNumbers() {
-
-		return IntStream.rangeClosed(1, 100)
-				.filter(i -> i % 2 == 0)
-				.toArray();
-	}
-
-	@Override
-	public Stream<double[]> getPythagoreanTriples() {
-		return IntStream.rangeClosed(1, 100)
-				.boxed()
-				.flatMap(a -> IntStream.rangeClosed(a, 100)
-						//.filter(b -> getPythagoreanSqrt(a, b) % 1 == 0)
-				        .mapToObj(b -> new double[] {
-				                a, b, Math.sqrt(a * a + b * b)})
-						.filter(t -> t[2] % 1 == 0)
-				);
-	}
-
-	@Override
-	public double getPythagoreanSqrt(int a, int b) {
-		return Math.sqrt(a * a + b * b);
-	}
-
-	@Override
-	public Stream<String> getStringFromStreamOf() {
-		return Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
-	}
-
-	@Override
-	public Stream<String> getEmptyStream() {
-		return Stream.empty();
-	}
-
-	@Override
-	public IntStream convertToIntStream(int[] arr) {
-		return Arrays.stream(arr);
-	}
-
-	@Override
-	public long getNumberOfUniqueWordsFromFile(String fileName) {
-
-		Path filePath = Paths.get(fileName);
-
-		try (Stream<String> lines = Files.lines(filePath,
-				Charset.defaultCharset())) {
-
-			return lines.flatMap(line -> Arrays.stream(line.split(" ")))
-					.distinct()
-					.count();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
-
-	@Override
-	public int[] getEvenNumbersWithIteration(int count) {
-		return Stream.iterate(0, i -> i + 2)
-				.limit(count)
-				.mapToInt(i -> i)
-				.toArray();
-	}
-
-	// Use Stream.iterate to generate Fibonacci tuples series
-	@Override
-	public List<Integer> getFibonaccis(int count) {
-		int[] init = {0, 1};
-		return Stream.iterate(init, arr ->
-				new int[] {arr[1], arr[0] + arr[1]})
-				.limit(10)
-				.map(t -> t[0])
-				.collect(toList());
-	}
-
-	/*
-	 * Use Stream.generate to generate a stream of five random double numbers
-	 * from 0 to 1
-	 */
-	@Override
-	public double[] getDoubleRandom(int count) {
-		return Stream.generate(Math::random)
-				.limit(count)
-				.mapToDouble(d -> d)
-				.toArray();
-	}
-
-	@Override
-	public int[] getArrayOfOne(int count) {
-		return IntStream
-				.generate(() -> 1)
-				.limit(count)
-				.toArray();
-	}
-
-	// COLLECT COLLECTORS ////////////////////////////////////////////////////
-
-	// Count the number of dishes in the menu
-	@Override
-	public long getNumberOfDishes() {
-
-//		this.getMenu()
-//				.mapToInt(m -> 1)
-//				.reduce(Integer::sum);
-//
-//		this.getMenu().count();
-
-		/*
-		 * Returns a Collector accepting elements of type T that counts the
-		 * number of input elements. If no elements are present, the result is
-		 * 0.
-		 */
-		return this.getMenu()
-				.collect(Collectors.counting());
-	}
-
-	@Override
-	public Optional<Dish> collectHighestCaloriesDish() {
-
-		/*
-		 * The reduce
-		 */
-//		return this.getMenu()
-//				.max(Comparator.comparing(Dish::getCalories));
-
-		/*
-		 * <T>
-		 * Collector<T, ?, Optional<T>> maxBy(Comparator<? super T> comparator)
-		 *
-		 * Returns a Collector that produces the maximal element according to a
-		 * given Comparator, described as an Optional<T>
-		 */
-		return this.getMenu()
-				.collect(Collectors.maxBy(Comparator.comparing(
-						Dish::getCalories)));
-	}
-
-	@Override
-	public Optional<Dish> collectLowestCaloriesDish() {
-
-//		return this.getMenu()
-//				.min(Comparator.comparing(Dish::getCalories));
-
-		/*
-		 * <T>
-		 * Collector<T, ?, Optional<T>> minBy(Comparator<? super T> comparator)
-		 *
-		 * Returns a Collector that produces the minimal element according to a
-		 * given Comparator, described as an Optional<T>.
-		 */
-		return this.getMenu()
-				.collect(Collectors.minBy(Comparator.comparing(
-						Dish::getCalories)));
-	}
-
-	@Override
-	public int collectTotalCalories() {
-
-//		return this.getMenu()
-//				.mapToInt(Dish::getCalories)
-//				.reduce(0, Integer::sum);
-
-		return this.getMenu()
-				.collect(Collectors.summingInt(Dish::getCalories));
-	}
-
-	/*
-	 * <T> Collector<T,?,Double> averagingInt(ToIntFunction<? super T> mapper)
-	 */
-	@Override
-	public double collectAverageOfCalories() {
-		return this.getMenu()
-				.collect(Collectors.averagingInt(Dish::getCalories));
-	}
-
-	@Override
-	public IntSummaryStatistics collectStatistsiceOfCalories() {
-		return this.getMenu()
-				.collect(Collectors.summarizingInt(
-						Dish::getCalories));
-	}
-
-	@Override
-	public String collectDishNames(CharSequence delimiter,
-	                               CharSequence prefix,
-	                               CharSequence suffix) {
-		return this.getMenu()
-				.map(Dish::getName)
-				.collect(Collectors.joining(delimiter, prefix, suffix));
-	}
-
-	@Override
-	public long reducingTotalCalories() {
-		return this.getMenu()
-				.collect(Collectors.reducing(0, Dish::getCalories,
-						Integer::sum));
-	}
-
-	@Override
-	public Optional<Dish> reducingHighestCaloriesDish() {
-		return this.getMenu()
-				.collect(reducing((d1, d2) ->
-						d1.getCalories() > d2.getCalories() ? d1 : d2));
-	}
-
-	@Override
-	public String joinStringsWithReducing() {
-		return this.getMenu()
-				.map(Dish::getName)
-				.collect(Collectors.reducing(
-						"", (n1, n2) -> n1 + n2));
-	}
-
-	@Override
-	public Map<Dish.Type, List<Dish>> getDishedByType() {
-		return this.getMenu()
-				.collect(Collectors.groupingBy(Dish::getType));
-	}
-
-	@Override
-	public Map<Dish.CALORIC_LEVEL, List<Dish>> getDishedByCaloricLevel() {
-		return this.getMenu()
-				.collect(Collectors.groupingBy(
-						d -> {
-							if (d.getCalories() <= Dish.LOW_CALORY_RULE ) {
-								return Dish.CALORIC_LEVEL.DIET;
-							} else if ((d.getCalories() > Dish.LOW_CALORY_RULE)
-							        && (d.getCalories() < 700)) {
-								return Dish.CALORIC_LEVEL.NORMAL;
-							} else {
-								return Dish.CALORIC_LEVEL.FAT;
-							}
-						}
-				));
-	}
-
-	@Override
-	public Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>>
-			getDishByTypeThenCaloricLevel() {
-
-		return this.getMenu()
-				.collect(Collectors.groupingBy(Dish::getType,
-						Collectors.groupingBy(d -> {
-							if (d.isFat()) {
-								return Dish.CALORIC_LEVEL.FAT;
-							} else if (d.isNormal()) {
-								return Dish.CALORIC_LEVEL.NORMAL;
-							} else {
-								return Dish.CALORIC_LEVEL.DIET;
-							}
-						})));
-	}
-
-	@Override
-	public Map<Dish.Type, Long> getDishCountForType() {
-		return this.getMenu()
-				.collect(groupingBy(Dish::getType, counting()));
-	}
-
-	@Override
-	public Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType() {
-		return this.getMenu()
-				.collect(Collectors.groupingBy(Dish::getType,
-						maxBy(comparingInt(Dish::getCalories))));
-	}
-
-	@Override
-	public Map<Dish.Type, Dish> getOneKCaloriesByType() {
-		return this.getMenu().
-				collect(groupingBy(Dish::getType,
-						collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
-								Optional::get)));
-	}
-
-	@Override
-	public Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
-			getCaloricLevelsForEachType() {
-
-		return this.menuRepository
-				.getMenu()
-				.collect(groupingBy(Dish::getType,
-						mapping(Dish::getCaloricLevel, toSet())));
-	}
-
-	@Override
-	public Map<Dish.Type, Set<Dish.CALORIC_LEVEL>>
-			getCaloricLevelsForEachTypeInHashSet() {
-
-		return this.menuRepository
-				.getMenu()
-				.collect(groupingBy(Dish::getType,
-						mapping(Dish::getCaloricLevel,
-								toCollection(HashSet::new))));
-	}
-
-	@Override
-	public List<Dish> getAllVegetarianDishesByPartitioning() {
-		return this.getMenu()
-				.collect(Collectors.partitioningBy(Dish::isVegetarian))
-				.get(true);
-	}
-
-	@Override
-	public Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType() {
-		return this.getMenu()
-				.collect(partitioningBy(Dish::isVegetarian,
-						groupingBy(Dish::getType)));
-	}
-
-	@Override
-	public Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen() {
-		return this.getMenu()
-				.collect(partitioningBy(Dish::isVegetarian,
-						collectingAndThen(maxBy(comparingInt(Dish::getCalories)),
-								Optional::get)));
-	}
-
-	@Override
-	public Map<Boolean, Map<Boolean, List<Dish>>>
-			getDishHavingSpecificCaloriesAmongVegenAndNonvegen( int calories) {
-
-		return this.getMenu().collect(partitioningBy(Dish::isVegetarian,
-				partitioningBy(d -> d.getCalories() > 500)));
-	}
-
-	@Override
-	public Map<Boolean, Long> getDishCountAmongVegenAndNonVegen() {
-		return this.getMenu()
-				.collect(partitioningBy(Dish::isVegetarian,
-						Collectors.counting()));
-	}
-
-	@Override
-	public Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int n) {
-		return IntStream.rangeClosed(2, n)
-				.boxed()
-				.collect(partitioningBy(
-						candidate -> IMenuService.isPrime(candidate)));
-	}
+    private final IMenuRepository menuRepository;
+
+    @Autowired
+    public MenuService(IMenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
+    }
+
+    @Override
+    public Stream<Dish> getMenu() {
+        return this.menuRepository.getMenu();
+    }
+
+    @Override
+    public List<String> getLowCaloryDishNames() {
+
+        return this.getMenu().filter(Dish::hasLowCalory).sorted(comparingInt(Dish::getCalories)).map(d -> d.getName()).collect(toList());
+    }
+
+    @Override
+    public List<String> getAllVegetarianDishes() {
+        return this.getMenu().filter(Dish::isVegetarian).map(Dish::getName).collect(toList());
+    }
+
+    @Override
+    public List<String> getFirstThree300CalDishes() {
+        return this.getMenu().filter(d -> d.getCalories() > 300).limit(3).map(Dish::getName).collect(toList());
+    }
+
+    @Override
+    public List<String> getAll300CalDishesExceptFirstTwo() {
+
+        return this.getMenu().filter(d -> d.getCalories() > 300).skip(2).map(Dish::getName).collect(toList());
+    }
+
+    @Override
+    public List<String> getFirstTwoMeatDishes() {
+        return this.getMenu().filter(Dish::isMeat).limit(2).map(Dish::getName).collect(toList());
+    }
+
+    @Override
+    public List<String> getAllDishNames() {
+        return this.getMenu().map(Dish::getName).collect(toList());
+    }
+
+    @Override
+    public List<Integer> countWordLength(List<String> words) {
+
+        if (words == null) {
+            return new ArrayList<>();
+        }
+
+        return words.stream().map(String::length).collect(toList());
+    }
+
+    @Override
+    public List<String> getUniqueCharactors(List<String> words) {
+
+        if (words == null) {
+            return new ArrayList<>();
+        }
+
+        return words.stream().map(w -> w.split("")).flatMap(Arrays::stream) // To avoid Stream<Stream<String>>
+                .distinct().collect(toList());
+    }
+
+    @Override
+    public int[] getSquares(int[] numbers) {
+        return Arrays.stream(numbers).map(i -> i * i).toArray();
+    }
+
+    @Override
+    public int[] filterEvenNumbers(int max) {
+
+        if (max > 100) {
+            System.out.println("Too many numbers to produce!");
+            return new int[0];
+        }
+
+        return IntStream.rangeClosed(0, max).filter(i -> i % 2 == 0).toArray();
+    }
+
+    @Override
+    public List<int[]> getAllPairs(int[] nums1, int[] nums2) {
+
+        if ((nums1 == null) || (nums2 == null)) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(nums1).boxed().flatMap(n1 -> Arrays.stream(nums2).boxed().map(n2 -> new int[]{n1, n2})).collect(toList());
+    }
+
+    @Override
+    public List<int[]> getAdvancedPairs(int[] nums1, int[] nums2) {
+        if ((nums1 == null) || (nums2 == null)) {
+            return new ArrayList<>();
+        }
+
+        return Arrays.stream(nums1).boxed().flatMap(n1 -> Arrays.stream(nums2).boxed().filter(n2 -> (n2 + n1) % 3 == 0).map(n2 -> new int[]{n1, n2})).collect(toList());
+    }
+
+    @Override
+    public boolean hasVegetarianDish() {
+        return this.getMenu().anyMatch(Dish::isVegetarian);
+    }
+
+    /*
+     * Find out whether the menu is healthy (that is, all dishes are below 1000
+     * calories)
+     */
+    @Override
+    public boolean hasHealthyDish() {
+        return this.getMenu().anyMatch(Dish::isHealthy);
+    }
+
+    @Override
+    public Dish getAnyVegetarianDish() throws RuntimeException {
+        return this.getMenu().filter(Dish::isVegetarian).findAny().orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public boolean isHealthyMenu() {
+        //		return this.getMenu()
+        //				.allMatch(Dish::isHealthy);
+        return this.getMenu().noneMatch(d -> d.getCalories() >= 1000);
+    }
+
+    @Override
+    public int firstSquareDivisibleBy3(IntStream data) {
+
+        return data.filter(i -> (i * i) % 3 == 0).findFirst().getAsInt();
+    }
+
+    @Override
+    public int getTotalCalories() {
+        //		return this.getMenu()
+        //				.mapToInt(Dish::getCalories)
+        //				.reduce(0, Integer::sum);
+
+        return this.getMenu().mapToInt(Dish::getCalories).sum();
+    }
+
+    @Override
+    public Dish getTheHighestCalorieDish() {
+        //		return this.getMenu()
+        //				.reduce((d1, d2) ->
+        //						d1.getCalories() > d2.getCalories() ? d1 : d2)
+        //				.get();
+        return this.getMenu().max(Comparator.comparing(Dish::getCalories)).get();
+    }
+
+    @Override
+    public Dish getTheLowestCalorieDish() {
+        //		return this.getMenu()
+        //				.reduce((d1, d2) ->
+        //						d1.getCalories() < d2.getCalories() ? d1 : d2)
+        //				.get();
+        return this.getMenu().min(Comparator.comparing(Dish::getCalories)).get();
+    }
+
+    @Override
+    public int getDishCount() {
+        return this.getMenu().mapToInt(d -> 1).reduce(0, Integer::sum);
+    }
+
+    @Override
+    public int getTheHeightestCalories() {
+        return this.getMenu().mapToInt(Dish::getCalories).reduce(Integer::max).getAsInt();
+    }
+
+    @Override
+    public int getTheLowestCalories() {
+        return this.getMenu().mapToInt(Dish::getCalories).reduce(Integer::min).getAsInt();
+    }
+
+    @Override
+    public int getCaloriesSum() {
+        return this.getMenu().mapToInt(Dish::getCalories).sum();
+    }
+
+    @Override
+    public int getMaxCalories() {
+        return this.getMenu().mapToInt(Dish::getCalories).max().getAsInt();
+    }
+
+    @Override
+    public int[] getEvenNumbers() {
+
+        return IntStream.rangeClosed(1, 100).filter(i -> i % 2 == 0).toArray();
+    }
+
+    @Override
+    public Stream<double[]> getPythagoreanTriples() {
+        return IntStream.rangeClosed(1, 100).boxed().flatMap(a -> IntStream.rangeClosed(a, 100)
+                //.filter(b -> getPythagoreanSqrt(a, b) % 1 == 0)
+                .mapToObj(b -> new double[]{a, b, Math.sqrt(a * a + b * b)}).filter(t -> t[2] % 1 == 0));
+    }
+
+    @Override
+    public double getPythagoreanSqrt(int a, int b) {
+        return Math.sqrt(a * a + b * b);
+    }
+
+    @Override
+    public Stream<String> getStringFromStreamOf() {
+        return Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
+    }
+
+    @Override
+    public Stream<String> getEmptyStream() {
+        return Stream.empty();
+    }
+
+    @Override
+    public IntStream convertToIntStream(int[] arr) {
+        return Arrays.stream(arr);
+    }
+
+    @Override
+    public long getNumberOfUniqueWordsFromFile(String fileName) {
+
+        Path filePath = Paths.get(fileName);
+
+        try (Stream<String> lines = Files.lines(filePath, Charset.defaultCharset())) {
+
+            return lines.flatMap(line -> Arrays.stream(line.split(" "))).distinct().count();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public int[] getEvenNumbersWithIteration(int count) {
+        return Stream.iterate(0, i -> i + 2).limit(count).mapToInt(i -> i).toArray();
+    }
+
+    // Use Stream.iterate to generate Fibonacci tuples series
+    @Override
+    public List<Integer> getFibonaccis(int count) {
+        int[] init = {0, 1};
+        return Stream.iterate(init, arr -> new int[]{arr[1], arr[0] + arr[1]}).limit(10).map(t -> t[0]).collect(toList());
+    }
+
+    /*
+     * Use Stream.generate to generate a stream of five random double numbers
+     * from 0 to 1
+     */
+    @Override
+    public double[] getDoubleRandom(int count) {
+        return Stream.generate(Math::random).limit(count).mapToDouble(d -> d).toArray();
+    }
+
+    @Override
+    public int[] getArrayOfOne(int count) {
+        return IntStream.generate(() -> 1).limit(count).toArray();
+    }
+
+    // COLLECT COLLECTORS ////////////////////////////////////////////////////
+
+    // Count the number of dishes in the menu
+    @Override
+    public long getNumberOfDishes() {
+
+        //		this.getMenu()
+        //				.mapToInt(m -> 1)
+        //				.reduce(Integer::sum);
+        //
+        //		this.getMenu().count();
+
+        /*
+         * Returns a Collector accepting elements of type T that counts the
+         * number of input elements. If no elements are present, the result is
+         * 0.
+         */
+        return this.getMenu().collect(Collectors.counting());
+    }
+
+    @Override
+    public Optional<Dish> collectHighestCaloriesDish() {
+
+        /*
+         * The reduce
+         */
+        //		return this.getMenu()
+        //				.max(Comparator.comparing(Dish::getCalories));
+
+        /*
+         * <T>
+         * Collector<T, ?, Optional<T>> maxBy(Comparator<? super T> comparator)
+         *
+         * Returns a Collector that produces the maximal element according to a
+         * given Comparator, described as an Optional<T>
+         */
+        return this.getMenu().collect(Collectors.maxBy(Comparator.comparing(Dish::getCalories)));
+    }
+
+    @Override
+    public Optional<Dish> collectLowestCaloriesDish() {
+
+        //		return this.getMenu()
+        //				.min(Comparator.comparing(Dish::getCalories));
+
+        /*
+         * <T>
+         * Collector<T, ?, Optional<T>> minBy(Comparator<? super T> comparator)
+         *
+         * Returns a Collector that produces the minimal element according to a
+         * given Comparator, described as an Optional<T>.
+         */
+        return this.getMenu().collect(Collectors.minBy(Comparator.comparing(Dish::getCalories)));
+    }
+
+    @Override
+    public int collectTotalCalories() {
+
+        //		return this.getMenu()
+        //				.mapToInt(Dish::getCalories)
+        //				.reduce(0, Integer::sum);
+
+        return this.getMenu().collect(Collectors.summingInt(Dish::getCalories));
+    }
+
+    /*
+     * <T> Collector<T,?,Double> averagingInt(ToIntFunction<? super T> mapper)
+     */
+    @Override
+    public double collectAverageOfCalories() {
+        return this.getMenu().collect(Collectors.averagingInt(Dish::getCalories));
+    }
+
+    @Override
+    public IntSummaryStatistics collectStatistsiceOfCalories() {
+        return this.getMenu().collect(Collectors.summarizingInt(Dish::getCalories));
+    }
+
+    @Override
+    public String collectDishNames(CharSequence delimiter, CharSequence prefix, CharSequence suffix) {
+        return this.getMenu().map(Dish::getName).collect(Collectors.joining(delimiter, prefix, suffix));
+    }
+
+    @Override
+    public long reducingTotalCalories() {
+        return this.getMenu().collect(Collectors.reducing(0, Dish::getCalories, Integer::sum));
+    }
+
+    @Override
+    public Optional<Dish> reducingHighestCaloriesDish() {
+        return this.getMenu().collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
+    }
+
+    @Override
+    public String joinStringsWithReducing() {
+        return this.getMenu().map(Dish::getName).collect(Collectors.reducing("", (n1, n2) -> n1 + n2));
+    }
+
+    @Override
+    public Map<Dish.Type, List<Dish>> getDishedByType() {
+        return this.getMenu().collect(Collectors.groupingBy(Dish::getType));
+    }
+
+    @Override
+    public Map<Dish.CALORIC_LEVEL, List<Dish>> getDishedByCaloricLevel() {
+        return this.getMenu().collect(Collectors.groupingBy(d -> {
+            if (d.getCalories() <= Dish.LOW_CALORY_RULE) {
+                return Dish.CALORIC_LEVEL.DIET;
+            } else if ((d.getCalories() > Dish.LOW_CALORY_RULE) && (d.getCalories() < 700)) {
+                return Dish.CALORIC_LEVEL.NORMAL;
+            } else {
+                return Dish.CALORIC_LEVEL.FAT;
+            }
+        }));
+    }
+
+    @Override
+    public Map<Dish.Type, Map<Dish.CALORIC_LEVEL, List<Dish>>> getDishByTypeThenCaloricLevel() {
+
+        return this.getMenu().collect(Collectors.groupingBy(Dish::getType, Collectors.groupingBy(d -> {
+            if (d.isFat()) {
+                return Dish.CALORIC_LEVEL.FAT;
+            } else if (d.isNormal()) {
+                return Dish.CALORIC_LEVEL.NORMAL;
+            } else {
+                return Dish.CALORIC_LEVEL.DIET;
+            }
+        })));
+    }
+
+    @Override
+    public Map<Dish.Type, Long> getDishCountForType() {
+        return this.getMenu().collect(groupingBy(Dish::getType, counting()));
+    }
+
+    @Override
+    public Map<Dish.Type, Optional<Dish>> getHighestCaloriesByType() {
+        return this.getMenu().collect(Collectors.groupingBy(Dish::getType, maxBy(comparingInt(Dish::getCalories))));
+    }
+
+    @Override
+    public Map<Dish.Type, Dish> getOneKCaloriesByType() {
+        return this.getMenu().
+                collect(groupingBy(Dish::getType, collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
+    }
+
+    @Override
+    public Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachType() {
+
+        return this.menuRepository.getMenu().collect(groupingBy(Dish::getType, mapping(Dish::getCaloricLevel, toSet())));
+    }
+
+    @Override
+    public Map<Dish.Type, Set<Dish.CALORIC_LEVEL>> getCaloricLevelsForEachTypeInHashSet() {
+
+        return this.menuRepository.getMenu().collect(groupingBy(Dish::getType, mapping(Dish::getCaloricLevel, toCollection(HashSet::new))));
+    }
+
+    @Override
+    public List<Dish> getAllVegetarianDishesByPartitioning() {
+        return this.getMenu().collect(Collectors.partitioningBy(Dish::isVegetarian)).get(true);
+    }
+
+    @Override
+    public Map<Boolean, Map<Dish.Type, List<Dish>>> getVegetarianDishesByType() {
+        return this.getMenu().collect(partitioningBy(Dish::isVegetarian, groupingBy(Dish::getType)));
+    }
+
+    @Override
+    public Map<Boolean, Dish> getTheMostCaloricDishAmongBothVegenAndNonvegen() {
+        return this.getMenu().collect(partitioningBy(Dish::isVegetarian, collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
+    }
+
+    @Override
+    public Map<Boolean, Map<Boolean, List<Dish>>> getDishHavingSpecificCaloriesAmongVegenAndNonvegen(int calories) {
+
+        return this.getMenu().collect(partitioningBy(Dish::isVegetarian, partitioningBy(d -> d.getCalories() > 500)));
+    }
+
+    @Override
+    public Map<Boolean, Long> getDishCountAmongVegenAndNonVegen() {
+        return this.getMenu().collect(partitioningBy(Dish::isVegetarian, Collectors.counting()));
+    }
+
+    @Override
+    public Map<Boolean, List<Integer>> getPrimesAndNonPrimesBelow(int n) {
+        return IntStream.rangeClosed(2, n).boxed().collect(partitioningBy(candidate -> IMenuService.isPrime(candidate)));
+    }
 
 }///:~

@@ -11,28 +11,31 @@ import java.util.concurrent.Future;
 
 public interface IShop {
 
-	Random TLR = new Random(System.currentTimeMillis());
+    Random TLR = new Random(System.currentTimeMillis());
 
-	String UNAVAILABLE_PRODUCT = "iPhone XI";
+    String UNAVAILABLE_PRODUCT = "iPhone XI";
 
-	String getName();
-	double calculatePrice(String product);
-	double getPrice(String product);
+    String getName();
 
-	String getPriceQuote(String product);
+    double calculatePrice(String product);
 
-	Future<Double> getPriceAsync(String product);
+    double getPrice(String product);
+
+    String getPriceQuote(String product);
+
+    Future<Double> getPriceAsync(String product);
+
     Future<Double> getPriceAsync(String product, Executor executor);
 
-	static void delay() {
+    static void delay() {
 
         int delay = 500 + TLR.nextInt(2000);
 
-		try {
-			Thread.sleep(delay);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+        try {
+            Thread.sleep(delay);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }///:~

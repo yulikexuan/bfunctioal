@@ -24,11 +24,7 @@ public class FruitClient {
         appleInventory = new ArrayList<>();
         appleBuilder = new Apple.Builder();
         for (int i = 0; i < SIZE; i++) {
-            appleInventory.add(appleBuilder
-                    .setBarcode(UUID.randomUUID().toString())
-                    .setColor(Color.values()[random.nextInt(Color.values().length)])
-                    .setWeight(random.nextInt(400))
-                    .create());
+            appleInventory.add(appleBuilder.setBarcode(UUID.randomUUID().toString()).setColor(Color.values()[random.nextInt(Color.values().length)]).setWeight(random.nextInt(400)).create());
             appleBuilder.clear();
         }
     }

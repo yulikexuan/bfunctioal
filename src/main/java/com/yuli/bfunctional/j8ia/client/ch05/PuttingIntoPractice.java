@@ -33,10 +33,7 @@ public class PuttingIntoPractice {
      */
     public List<Transaction> query_1() {
 
-        List<Transaction> t2011 = this.transactions.stream()
-                .filter(t -> t.getYear() == 2011)
-                .sorted(Comparator.comparing(Transaction::getValue))
-                .collect(Collectors.toList());
+        List<Transaction> t2011 = this.transactions.stream().filter(t -> t.getYear() == 2011).sorted(Comparator.comparing(Transaction::getValue)).collect(Collectors.toList());
 
         log.debug(">>>>>>> Query 1: " + t2011);
 
@@ -45,57 +42,37 @@ public class PuttingIntoPractice {
 
     // all_The_Unique_Cities_Where_The_Traders_Work
     public List<String> query_2() {
-        return this.transactions.stream()
-                .map(Transaction::getTraderCity)
-                .distinct()
-                .collect(Collectors.toList());
+        return this.transactions.stream().map(Transaction::getTraderCity).distinct().collect(Collectors.toList());
     }
 
     // all_Traders_From_Cambridge_And_Sorted_By_Name
     public List<Trader> query_3() {
-        return this.transactions.stream()
-                .filter(t -> "Cambridge".equals(t.getTraderCity()))
-                .map(Transaction::getTrader)
-                .sorted(Comparator.comparing(Trader::getName))
-                .collect(Collectors.toList());
+        return this.transactions.stream().filter(t -> "Cambridge".equals(t.getTraderCity())).map(Transaction::getTrader).sorted(Comparator.comparing(Trader::getName)).collect(Collectors.toList());
     }
 
     // a_String_Of_All_Traders_Names_Sorted_By_Alphabetically
     public String query_4() {
-        return this.transactions.stream()
-                .map(Transaction::getTraderName)
-                .distinct()
-                .sorted()
-                .reduce("", (n1, n2) -> n1 + n2);
+        return this.transactions.stream().map(Transaction::getTraderName).distinct().sorted().reduce("", (n1, n2) -> n1 + n2);
     }
 
     // any_Traders_Based_In_Milan
     public boolean query_5() {
-        return this.transactions.stream()
-                .anyMatch(t -> "Milan".equals(t.getTraderCity()));
+        return this.transactions.stream().anyMatch(t -> "Milan".equals(t.getTraderCity()));
     }
 
     // all_Transactions_Values_From_Traders_Living_In_Cambridge
     public List<Integer> query_6() {
-        return this.transactions.stream()
-                .filter(t -> "Cambridge".equals(t.getTraderCity()))
-                .map(Transaction::getValue)
-                .collect(Collectors.toList());
+        return this.transactions.stream().filter(t -> "Cambridge".equals(t.getTraderCity())).map(Transaction::getValue).collect(Collectors.toList());
     }
 
     // the_Highest_Value_Of_All_The_Transactions
     public Integer query_7() {
-        return this.transactions.stream()
-                .map(Transaction::getValue)
-                .reduce(Integer::max)
-                .get();
+        return this.transactions.stream().map(Transaction::getValue).reduce(Integer::max).get();
     }
 
     // transaction_With_The_Smallest_Value
     public Transaction query_8() {
-        return this.transactions.stream()
-                .min(Comparator.comparing(Transaction::getValue))
-                .get();
+        return this.transactions.stream().min(Comparator.comparing(Transaction::getValue)).get();
     }
 
 }///:~

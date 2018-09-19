@@ -7,7 +7,7 @@ package com.yuli.bfunctional.j8ia.domain.model;
 import lombok.ToString;
 
 
-@ToString(callSuper=true)
+@ToString(callSuper = true)
 public class Apple extends Fruit {
 
     public Apple() {

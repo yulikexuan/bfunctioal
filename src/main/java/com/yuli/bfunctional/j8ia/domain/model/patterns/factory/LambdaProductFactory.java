@@ -10,25 +10,24 @@ import java.util.function.Supplier;
 
 public class LambdaProductFactory implements IProductFactory {
 
-	private static final Map<String, Supplier<IFinanceProduct>> F_MAP =
-			new HashMap<>();
+    private static final Map<String, Supplier<IFinanceProduct>> F_MAP = new HashMap<>();
 
-	static {
-		F_MAP.put("loan", Loan::new);
-		F_MAP.put("stock", Stock::new);
-		F_MAP.put("bond", Bond::new);
-	}
+    static {
+        F_MAP.put("loan", Loan::new);
+        F_MAP.put("stock", Stock::new);
+        F_MAP.put("bond", Bond::new);
+    }
 
-	@Override
-	public IFinanceProduct createProduct(String name) {
+    @Override
+    public IFinanceProduct createProduct(String name) {
 
-		Supplier<IFinanceProduct> fpSupplier = F_MAP.get(name);
+        Supplier<IFinanceProduct> fpSupplier = F_MAP.get(name);
 
-		if (fpSupplier != null) {
-			return fpSupplier.get();
-		}
+        if (fpSupplier != null) {
+            return fpSupplier.get();
+        }
 
-		throw new RuntimeException("No such product " + name);
-	}
+        throw new RuntimeException("No such product " + name);
+    }
 
 }///:~

@@ -16,36 +16,32 @@ import static org.junit.Assert.*;
 
 public class PersonTest {
 
-	private Person person;
-	private Car car;
-	private Insurance insurance;
+    private Person person;
+    private Car car;
+    private Insurance insurance;
     private String instranceName;
 
     private Optional<Person> optPerson;
 
-	@Before
-	public void setUp() throws Exception {
-		this.instranceName = UUID.randomUUID().toString();
-		this.insurance = new Insurance(this.instranceName);
-		this.car = new Car(this.insurance);
-		this.person = new Person(this.car);
-		this.optPerson = Optional.ofNullable(this.person);
-	}
+    @Before
+    public void setUp() throws Exception {
+        this.instranceName = UUID.randomUUID().toString();
+        this.insurance = new Insurance(this.instranceName);
+        this.car = new Car(this.insurance);
+        this.person = new Person(this.car);
+        this.optPerson = Optional.ofNullable(this.person);
+    }
 
-	@Test
-	public void able_To_Get_Insurance_Name_From_Person() throws Exception {
+    @Test
+    public void able_To_Get_Insurance_Name_From_Person() throws Exception {
 
-		// Given
+        // Given
 
-		// When
-		String name = this.optPerson
-				.flatMap(Person::getCarAsOptional)
-				.flatMap(Car::getInsuranceAsOptoinal)
-				.map(Insurance::getName)
-				.orElse("Unknown");
+        // When
+        String name = this.optPerson.flatMap(Person::getCarAsOptional).flatMap(Car::getInsuranceAsOptoinal).map(Insurance::getName).orElse("Unknown");
 
-		// Then
-		assertThat(name, is(this.instranceName));
-	}
+        // Then
+        assertThat(name, is(this.instranceName));
+    }
 
 }///:~

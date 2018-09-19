@@ -13,26 +13,26 @@ import static org.junit.Assert.*;
 
 public class LambdaProductFactoryTest {
 
-	private IProductFactory pf;
+    private IProductFactory pf;
 
-	@Before
-	public void setUp() throws Exception {
-		this.pf = new LambdaProductFactory();
-	}
+    @Before
+    public void setUp() throws Exception {
+        this.pf = new LambdaProductFactory();
+    }
 
-	@Test
-	public void able_To_Create_Finance_Products() throws Exception {
+    @Test
+    public void able_To_Create_Finance_Products() throws Exception {
 
-		// Given
+        // Given
 
-		// When
-		IFinanceProduct loan = this.pf.createProduct("loan");
-		IFinanceProduct stock = this.pf.createProduct("stock");
-		IFinanceProduct bond = this.pf.createProduct("bond");
-		// Then
-		assertThat(loan, instanceOf(Loan.class));
-		assertThat(stock, instanceOf(Stock.class));
-		assertThat(bond, instanceOf(Bond.class));
-	}
+        // When
+        IFinanceProduct loan = this.pf.createProduct("loan");
+        IFinanceProduct stock = this.pf.createProduct("stock");
+        IFinanceProduct bond = this.pf.createProduct("bond");
+        // Then
+        assertThat(loan, instanceOf(Loan.class));
+        assertThat(stock, instanceOf(Stock.class));
+        assertThat(bond, instanceOf(Bond.class));
+    }
 
 }///:~

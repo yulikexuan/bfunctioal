@@ -14,20 +14,17 @@ import java.util.Optional;
 
 public class InsuranceService {
 
-	public Optional<Insurance> getCheapestInsurance(
-			Optional<Person> optPerson, Optional<Car> optCar) {
+    public Optional<Insurance> getCheapestInsurance(Optional<Person> optPerson, Optional<Car> optCar) {
 
-		return optPerson.flatMap(
-				p -> optCar.map(c -> {
-					System.out.println("In map function of car");
-					return findCheapestInsurance(p, c);
-				}));
-	}
+        return optPerson.flatMap(p -> optCar.map(c -> {
+            System.out.println("In map function of car");
+            return findCheapestInsurance(p, c);
+        }));
+    }
 
-	private Insurance findCheapestInsurance(@NonNull Person person,
-	                                        @NonNull Car car) {
+    private Insurance findCheapestInsurance(@NonNull Person person, @NonNull Car car) {
 
-		return new Insurance("CheapInc");
-	}
+        return new Insurance("CheapInc");
+    }
 
 }///:~

@@ -6,8 +6,8 @@ package com.yuli.bfunctional.j8ia.domain.model.patterns.factory;
 
 public class Loan extends FinanceProduct {
 
-	public Loan() {
-		this.setName("loan");
-	}
+    public Loan() {
+        this.setName("loan");
+    }
 
 }///:~

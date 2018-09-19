@@ -15,64 +15,62 @@ import static org.junit.Assert.*;
 
 public class ProducerTest {
 
-	private Producer producer;
+    private Producer producer;
 
-	@Before
-	public void setUp() throws Exception {
-		this.producer = new Producer();
-		List<C2> c2List = new ArrayList<>();
-		c2List.add(new C2());
-		c2List.add(new D1());
-		c2List.add(new D2());
-		c2List.add(new E1());
-		c2List.add(new E2());
-		c2List.add(new E3());
-		c2List.add(new E4());
-		this.producer.setElements(c2List);
-	}
+    @Before
+    public void setUp() throws Exception {
+        this.producer = new Producer();
+        List<C2> c2List = new ArrayList<>();
+        c2List.add(new C2());
+        c2List.add(new D1());
+        c2List.add(new D2());
+        c2List.add(new E1());
+        c2List.add(new E2());
+        c2List.add(new E3());
+        c2List.add(new E4());
+        this.producer.setElements(c2List);
+    }
 
-	@Test
-	public void able_To_Produce_Elements_Whose_Super_Class_Is_C2() throws Exception {
+    @Test
+    public void able_To_Produce_Elements_Whose_Super_Class_Is_C2() throws Exception {
 
-		// Given
-		List<? extends C2> elements = this.producer.getElements();
+        // Given
+        List<? extends C2> elements = this.producer.getElements();
 
-		// When
-		boolean notC2 = elements.stream()
-				.anyMatch(e -> !(e instanceof C2));
+        // When
+        boolean notC2 = elements.stream().anyMatch(e -> !(e instanceof C2));
 
-		// Then
-		assertThat(notC2, is(false));
-	}
+        // Then
+        assertThat(notC2, is(false));
+    }
 
-	@Test
-	public void not_Able_To_Add_Any_New_Element_After_Init() throws Exception {
+    @Test
+    public void not_Able_To_Add_Any_New_Element_After_Init() throws Exception {
 
-		// Given
-		List<? extends C2> elements = this.producer.getElements();
+        // Given
+        List<? extends C2> elements = this.producer.getElements();
 
-		// When
-		// elements.add(new C2());
-		// elements.add(new D1());
-		// elements.add(new D2());
-	}
+        // When
+        // elements.add(new C2());
+        // elements.add(new D1());
+        // elements.add(new D2());
+    }
 
-	@Test
-	public void compatible_With_D1_List() throws Exception {
+    @Test
+    public void compatible_With_D1_List() throws Exception {
 
-		// Given
-		List<D1> d1List = new ArrayList<>();
-		d1List.add(new D1());
-		d1List.add(new E1());
-		d1List.add(new E2());
-		this.producer.setElements(d1List);
+        // Given
+        List<D1> d1List = new ArrayList<>();
+        d1List.add(new D1());
+        d1List.add(new E1());
+        d1List.add(new E2());
+        this.producer.setElements(d1List);
 
-		// When
-		boolean notD1 = this.producer.getElements().stream()
-				.anyMatch(e -> !(e instanceof D1));
+        // When
+        boolean notD1 = this.producer.getElements().stream().anyMatch(e -> !(e instanceof D1));
 
-		// Then
-		assertThat(notD1, is(false));
-	}
+        // Then
+        assertThat(notD1, is(false));
+    }
 
 }///:~

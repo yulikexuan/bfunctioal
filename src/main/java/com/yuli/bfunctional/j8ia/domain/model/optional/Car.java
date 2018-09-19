@@ -14,14 +14,14 @@ import java.util.Optional;
 @NoArgsConstructor
 public class Car {
 
-	private Insurance insurance;
+    private Insurance insurance;
 
-	public Car(Insurance insurance) {
-		this.insurance = insurance;
-	}
+    public Car(Insurance insurance) {
+        this.insurance = insurance;
+    }
 
-	public Optional<Insurance> getInsuranceAsOptoinal() {
-		return Optional.ofNullable(this.insurance);
-	}
+    public Optional<Insurance> getInsuranceAsOptoinal() {
+        return Optional.ofNullable(this.insurance);
+    }
 
 }///:~

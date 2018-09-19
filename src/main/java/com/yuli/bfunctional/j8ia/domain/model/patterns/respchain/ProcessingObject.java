@@ -9,27 +9,27 @@ import java.util.function.UnaryOperator;
 
 public class ProcessingObject<T> {
 
-	private final UnaryOperator<T> operator;
+    private final UnaryOperator<T> operator;
 
-	private ProcessingObject<T> successor;
+    private ProcessingObject<T> successor;
 
-	public ProcessingObject(UnaryOperator<T> operator) {
-		this.operator = operator;
-	}
+    public ProcessingObject(UnaryOperator<T> operator) {
+        this.operator = operator;
+    }
 
-	public void setSuccessor(ProcessingObject<T> successor) {
-		this.successor = successor;
-	}
+    public void setSuccessor(ProcessingObject<T> successor) {
+        this.successor = successor;
+    }
 
-	public T handle(T input) {
+    public T handle(T input) {
 
-		T r = this.operator.apply(input);
+        T r = this.operator.apply(input);
 
-		if (this.successor != null) {
-			return this.successor.handle(r);
-		}
+        if (this.successor != null) {
+            return this.successor.handle(r);
+        }
 
-		return r;
-	}
+        return r;
+    }
 
 }///:~

@@ -11,17 +11,16 @@ import java.util.function.Consumer;
 
 public class OnlineBankingLambda {
 
-	private final ICustomerRepository customerRepository;
+    private final ICustomerRepository customerRepository;
 
-	public OnlineBankingLambda(ICustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
+    public OnlineBankingLambda(ICustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
-	public void processCustomer(long id,
-	                            Consumer<ICustomer> makeCustomerHappy) {
+    public void processCustomer(long id, Consumer<ICustomer> makeCustomerHappy) {
 
-		ICustomer customer = this.customerRepository.getById(id);
-		makeCustomerHappy.accept(this.customerRepository.getById(id));
-	}
+        ICustomer customer = this.customerRepository.getById(id);
+        makeCustomerHappy.accept(this.customerRepository.getById(id));
+    }
 
 }///:~

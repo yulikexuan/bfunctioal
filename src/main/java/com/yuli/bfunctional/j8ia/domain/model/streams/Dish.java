@@ -10,71 +10,73 @@ import lombok.*;
 @Data
 public class Dish {
 
-	public static final int LOW_CALORY_RULE = 400;
-	public static final int FAT_CALORY_RULE = 700;
+    public static final int LOW_CALORY_RULE = 400;
+    public static final int FAT_CALORY_RULE = 700;
 
-	public enum Type {
-		MEAT, FISH, OTHER,
-	}//:~
+    public enum Type {
+        MEAT, FISH, OTHER,
+    }//:~
 
-	public enum CALORIC_LEVEL {
-		DIET, NORMAL, FAT,
-	}
+    public enum CALORIC_LEVEL {
+        DIET, NORMAL, FAT,
+    }
 
-	private String name;
-	private boolean vegetarian;
-	private int calories;
-	private Type type;
+    private String name;
+    private boolean vegetarian;
+    private int calories;
+    private Type type;
 
-	public Dish(String name, boolean vegetarian, int calories, Type type) {
-		this.name = name;
-		this.vegetarian = vegetarian;
-		this.calories = calories;
-		this.type = type;
-	}
+    public Dish(String name, boolean vegetarian, int calories, Type type) {
+        this.name = name;
+        this.vegetarian = vegetarian;
+        this.calories = calories;
+        this.type = type;
+    }
 
-	public boolean hasLowCalory() {
-		return this.calories >= LOW_CALORY_RULE ? false : true;
-	}
+    public boolean hasLowCalory() {
+        return this.calories >= LOW_CALORY_RULE ? false : true;
+    }
 
-	public boolean isMeat() {
-		return this.type == Type.MEAT;
-	}
-	public boolean isFish() {
-		return this.type == Type.FISH;
-	}
-	public boolean isOtherType() {
-		return this.type == Type.OTHER;
-	}
-	public boolean isHealthy() {
-		return this.calories < 1000;
-	}
+    public boolean isMeat() {
+        return this.type == Type.MEAT;
+    }
 
-	public boolean isDiet() {
-		return this.getCalories() < LOW_CALORY_RULE;
-	}
+    public boolean isFish() {
+        return this.type == Type.FISH;
+    }
 
-	public boolean isNormal() {
-		return this.getCalories() >= LOW_CALORY_RULE &&
-				this.getCalories() < FAT_CALORY_RULE;
-	}
+    public boolean isOtherType() {
+        return this.type == Type.OTHER;
+    }
 
-	public boolean isFat() {
-		return this.getCalories() >= FAT_CALORY_RULE;
-	}
+    public boolean isHealthy() {
+        return this.calories < 1000;
+    }
 
-	public CALORIC_LEVEL getCaloricLevel() {
-		if (this.isDiet()) {
-			return CALORIC_LEVEL.DIET;
-		} else if (this.isNormal()) {
-			return CALORIC_LEVEL.NORMAL;
-		} else {
-			return CALORIC_LEVEL.FAT;
-		}
-	}
+    public boolean isDiet() {
+        return this.getCalories() < LOW_CALORY_RULE;
+    }
 
-	public int getCalories() {
-		return this.calories;
-	}
+    public boolean isNormal() {
+        return this.getCalories() >= LOW_CALORY_RULE && this.getCalories() < FAT_CALORY_RULE;
+    }
+
+    public boolean isFat() {
+        return this.getCalories() >= FAT_CALORY_RULE;
+    }
+
+    public CALORIC_LEVEL getCaloricLevel() {
+        if (this.isDiet()) {
+            return CALORIC_LEVEL.DIET;
+        } else if (this.isNormal()) {
+            return CALORIC_LEVEL.NORMAL;
+        } else {
+            return CALORIC_LEVEL.FAT;
+        }
+    }
+
+    public int getCalories() {
+        return this.calories;
+    }
 
 }///:~

@@ -11,6 +11,6 @@ import java.util.stream.Stream;
 
 public interface IMenuRepository {
 
-	Stream<Dish> getMenu();
+    Stream<Dish> getMenu();
 
 }///:~

@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of="barcode")
+@EqualsAndHashCode(of = "barcode")
 @ToString(of = {"color", "weight"})
 public class Fruit {
 

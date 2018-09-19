@@ -31,26 +31,15 @@ public class ShopTest {
     private List<IShop> shops;
 
     @Before
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
 
         int cores = Runtime.getRuntime().availableProcessors();
         System.out.printf("There are %1$d cores available. %n", cores);
 
-	    this.availableProduct = "iPhone X";
-	    this.unavailableProduct = IShop.UNAVAILABLE_PRODUCT;
-	    this.shops = Arrays.asList(
-	            new Shop("BestBuy"),
-                new Shop("Amazon"),
-                new Shop("Costco"),
-                new Shop("BuyItAll"),
-                new Shop("Walmart"),
-                new Shop("CoolShop"),
-                new Shop("Bay"),
-                new Shop("Payless"),
-                new Shop("Aldo"),
-                new Shop("Dell")
-        );
-	}
+        this.availableProduct = "iPhone X";
+        this.unavailableProduct = IShop.UNAVAILABLE_PRODUCT;
+        this.shops = Arrays.asList(new Shop("BestBuy"), new Shop("Amazon"), new Shop("Costco"), new Shop("BuyItAll"), new Shop("Walmart"), new Shop("CoolShop"), new Shop("Bay"), new Shop("Payless"), new Shop("Aldo"), new Shop("Dell"));
+    }
 
     @Test
     public void able_To_Get_Normal_Product_Price() throws Exception {
@@ -64,14 +53,13 @@ public class ShopTest {
 
     private void able_To_Get_Price_Asynchronously(String product) throws Exception {
 
-	    // Given
+        // Given
         long start = System.nanoTime();
         Future<Double> futurePrice = shops.get(0).getPriceAsync(product);
         long invocationTime = (System.nanoTime() - start) / 1_000_000;
 
         // %n is portable accross platforms \n is not.
-        System.out.printf("Invocation returned after %1$d msecs. %n",
-                invocationTime);
+        System.out.printf("Invocation returned after %1$d msecs. %n", invocationTime);
 
         this.doSomethingElse();
 
@@ -81,8 +69,7 @@ public class ShopTest {
             price = futurePrice.get();
         } catch (InterruptedException | ExecutionException e) {
             assertThat(e instanceof ExecutionException, is(true));
-            assertThat(e.getCause().getMessage(),
-                    equalTo("The product is unavailable."));
+            assertThat(e.getCause().getMessage(), equalTo("The product is unavailable."));
             throw new RuntimeException(e);
         }
         System.out.printf("The price of %s is %10.2f%n", product, price);
@@ -99,18 +86,15 @@ public class ShopTest {
 
     @Test
     public void able_To_Get_Prices_From_Multi_Shops_In_A_Bad_Way() {
-        this.able_To_Get_Prices_From_Multi_Shops_In_A_Specified_Way(
-                this.findPricesOfAProductInABadWay);
+        this.able_To_Get_Prices_From_Multi_Shops_In_A_Specified_Way(this.findPricesOfAProductInABadWay);
     }
 
     @Test
     public void able_To_Get_Prices_From_Multi_Shops_In_A_Parallel_Way() {
-        this.able_To_Get_Prices_From_Multi_Shops_In_A_Specified_Way(
-                this.findPricesOfAProductInAParallelWay);
+        this.able_To_Get_Prices_From_Multi_Shops_In_A_Specified_Way(this.findPricesOfAProductInAParallelWay);
     }
 
-    void able_To_Get_Prices_From_Multi_Shops_In_A_Specified_Way(
-            Function<String, List<String>> func) {
+    void able_To_Get_Prices_From_Multi_Shops_In_A_Specified_Way(Function<String, List<String>> func) {
 
         // Given
         long start = System.nanoTime();
@@ -126,17 +110,9 @@ public class ShopTest {
         System.out.printf("Done in %d msecs.", duration);
     }
 
-    Function<String, List<String>> findPricesOfAProductInABadWay = p ->
-        this.shops.stream()
-                .map(s -> String.format("%s price is %.2f",
-                        s.getName(), s.getPrice(p)))
-                .collect(Collectors.toList());
+    Function<String, List<String>> findPricesOfAProductInABadWay = p -> this.shops.stream().map(s -> String.format("%s price is %.2f", s.getName(), s.getPrice(p))).collect(Collectors.toList());
 
-    Function<String, List<String>> findPricesOfAProductInAParallelWay = p ->
-        this.shops.parallelStream()
-                .map(s -> String.format("%s price is %.2f",
-                        s.getName(), s.getPrice(p)))
-                .collect(Collectors.toList());
+    Function<String, List<String>> findPricesOfAProductInAParallelWay = p -> this.shops.parallelStream().map(s -> String.format("%s price is %.2f", s.getName(), s.getPrice(p))).collect(Collectors.toList());
 
     @Test
     public void able_To_Get_Prices_From_Multi_Shops_In_Async_Way() throws Exception {
@@ -144,17 +120,10 @@ public class ShopTest {
         // Given
         long start = System.nanoTime();
 
-        List<CompletableFuture<String>> priceFutures = this.shops.stream()
-                .map(s -> CompletableFuture.supplyAsync(
-                        () -> String.format("%s price is %.2f", s.getName(),
-                                s.getPrice(this.availableProduct)),
-                        this.provideExecutor()))
-                .collect(Collectors.toList());
+        List<CompletableFuture<String>> priceFutures = this.shops.stream().map(s -> CompletableFuture.supplyAsync(() -> String.format("%s price is %.2f", s.getName(), s.getPrice(this.availableProduct)), this.provideExecutor())).collect(Collectors.toList());
 
         // When
-        List<String> prices = priceFutures.stream()
-                .map(CompletableFuture::join)
-                .collect(Collectors.toList());
+        List<String> prices = priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
         long duration = (System.nanoTime() - start) / 1_000_000;
 
@@ -169,20 +138,19 @@ public class ShopTest {
     private Executor provideExecutor() {
         int shopSize = this.shops.size();
         int threadPoolSize = Math.min(shopSize, THREAD_LIMIT);
-        return Executors.newFixedThreadPool(threadPoolSize,
-                r -> {
-                    Thread t = new Thread(r);
-                    t.setDaemon(true);
-                    return t;
-                });
-//                new ThreadFactory() {
-//                    @Override
-//                    public Thread newThread(Runnable r) {
-//                        Thread t = new Thread(r);
-//                        t.setDaemon(true);
-//                        return t;
-//                    }
-//        });
+        return Executors.newFixedThreadPool(threadPoolSize, r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        });
+        //                new ThreadFactory() {
+        //                    @Override
+        //                    public Thread newThread(Runnable r) {
+        //                        Thread t = new Thread(r);
+        //                        t.setDaemon(true);
+        //                        return t;
+        //                    }
+        //        });
     }
 
     @Test
@@ -192,13 +160,9 @@ public class ShopTest {
         long startTime = System.nanoTime();
 
         // When
-        List<String> finalPrices = this.shops.stream()
-                .map(s -> s.getPriceQuote(this.availableProduct))
-                .map(Quote::parse)
-                .map(Discount::applyDiscount)
-                .collect(Collectors.toList());
+        List<String> finalPrices = this.shops.stream().map(s -> s.getPriceQuote(this.availableProduct)).map(Quote::parse).map(Discount::applyDiscount).collect(Collectors.toList());
 
-        long duration = (System.nanoTime() - startTime)  / 1_000_000;
+        long duration = (System.nanoTime() - startTime) / 1_000_000;
 
         // Tnen
         System.out.println(finalPrices);
@@ -213,18 +177,10 @@ public class ShopTest {
 
         final Executor executor = this.provideExecutor();
 
-        List<CompletableFuture<String>> priceFutures = this.shops.stream()
-                .map(s -> CompletableFuture.supplyAsync(
-                        () -> s.getPriceQuote(this.availableProduct), executor))
-                .map(f -> f.thenApply(Quote::parse))
-                .map(f -> f.thenCompose(q -> CompletableFuture.supplyAsync(
-                        () -> Discount.applyDiscount(q), executor)))
-                .collect(Collectors.toList());
+        List<CompletableFuture<String>> priceFutures = this.shops.stream().map(s -> CompletableFuture.supplyAsync(() -> s.getPriceQuote(this.availableProduct), executor)).map(f -> f.thenApply(Quote::parse)).map(f -> f.thenCompose(q -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(q), executor))).collect(Collectors.toList());
 
         // When
-        List<String> finalPrices = priceFutures.stream()
-                .map(CompletableFuture::join)
-                .collect(Collectors.toList());
+        List<String> finalPrices = priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
         long duration = (System.nanoTime() - startTime) / 1_000_000;
 
@@ -241,18 +197,10 @@ public class ShopTest {
 
         final Executor executor = this.provideExecutor();
 
-        List<CompletableFuture<String>> priceFutures = this.shops.stream()
-                .map(s -> CompletableFuture.supplyAsync(
-                        () -> s.getPriceQuote(this.availableProduct), executor))
-                .map(f -> f.thenApply(Quote::parse))
-                .map(f -> f.thenCompose(q -> CompletableFuture.supplyAsync(
-                        () -> Discount.applyDiscount(q), executor)))
-                .collect(Collectors.toList());
+        List<CompletableFuture<String>> priceFutures = this.shops.stream().map(s -> CompletableFuture.supplyAsync(() -> s.getPriceQuote(this.availableProduct), executor)).map(f -> f.thenApply(Quote::parse)).map(f -> f.thenCompose(q -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(q), executor))).collect(Collectors.toList());
 
         // When
-        CompletableFuture[] cfs = priceFutures.stream()
-                .map(f -> f.thenAccept(System.out::println))
-                .toArray(s -> new CompletableFuture[s]);
+        CompletableFuture[] cfs = priceFutures.stream().map(f -> f.thenAccept(System.out::println)).toArray(s -> new CompletableFuture[s]);
 
         CompletableFuture.allOf(cfs).join();
 
@@ -271,21 +219,10 @@ public class ShopTest {
 
         final Executor executor = this.provideExecutor();
 
-        List<CompletableFuture<Double>> priceFutures = this.shops.stream()
-                .map(s -> CompletableFuture.supplyAsync(
-                        () -> s.getPrice(this.availableProduct), executor))
-                .map(cf -> cf.thenCombine(
-                        CompletableFuture.supplyAsync(
-                                () -> ExchangeService.getRate(
-                                        ExchangeService.Money.EUR,
-                                        ExchangeService.Money.USD)),
-                        (price, rate) -> price * rate))
-                .collect(Collectors.toList());
+        List<CompletableFuture<Double>> priceFutures = this.shops.stream().map(s -> CompletableFuture.supplyAsync(() -> s.getPrice(this.availableProduct), executor)).map(cf -> cf.thenCombine(CompletableFuture.supplyAsync(() -> ExchangeService.getRate(ExchangeService.Money.EUR, ExchangeService.Money.USD)), (price, rate) -> price * rate)).collect(Collectors.toList());
 
         // When
-        List<Double> prices = priceFutures.stream()
-                .map(CompletableFuture::join)
-                .collect(Collectors.toList());
+        List<Double> prices = priceFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
         long duration = (System.nanoTime() - startTime) / 1_000_000;
 

@@ -17,10 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Consumer {
 
-	/*
-	 * The purpose of 'List<? super C2> elements' is to let the client of
-	 * elements add new elenent whose super class is C2.
-	 */
-	List<? super C2> elements = new ArrayList<C2>();
+    /*
+     * The purpose of 'List<? super C2> elements' is to let the client of
+     * elements add new elenent whose super class is C2.
+     */ List<? super C2> elements = new ArrayList<C2>();
 
 }///:~

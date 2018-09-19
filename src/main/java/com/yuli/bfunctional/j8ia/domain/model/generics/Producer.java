@@ -17,10 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Producer {
 
-	/*
-	 * The purpose of 'List<? extends C2> elements' is to produce elements
-	 * whose super class must be C2
-	 */
-	private List<? extends C2> elements = new ArrayList<C2>();
+    /*
+     * The purpose of 'List<? extends C2> elements' is to produce elements
+     * whose super class must be C2
+     */
+    private List<? extends C2> elements = new ArrayList<C2>();
 
 }///:~

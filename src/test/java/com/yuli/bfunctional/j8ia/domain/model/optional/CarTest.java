@@ -20,33 +20,36 @@ import static org.junit.Assert.*;
 @RunWith(Theories.class)
 public class CarTest {
 
-	private Optional<Car> optCar;
+    private Optional<Car> optCar;
 
-	@Before
-	public void setUp() throws Exception {
-	}
+    @Before
+    public void setUp() throws Exception {
+    }
 
-	@Test
-	public void optCar_Can_Be_Empty() throws Exception {
+    @Test
+    public void optCar_Can_Be_Empty() throws Exception {
 
-		// When
-		this.optCar = Optional.empty();
+        // When
+        this.optCar = Optional.empty();
 
-		// Then
-		assertThat(this.optCar.isPresent(), is(false));
-	}
+        // Then
+        assertThat(this.optCar.isPresent(), is(false));
+    }
 
-	@DataPoint public static Car car = new Car();
-	@DataPoint public static Car nullCar = null;
-	@Theory
-	public void optCar_Can_Be_From_Nullable_Value(Car car) throws Exception {
+    @DataPoint
+    public static Car car = new Car();
+    @DataPoint
+    public static Car nullCar = null;
 
-		// Given
+    @Theory
+    public void optCar_Can_Be_From_Nullable_Value(Car car) throws Exception {
 
-		// When
-		this.optCar = Optional.ofNullable(car);
+        // Given
 
-		// Then
-	}
+        // When
+        this.optCar = Optional.ofNullable(car);
+
+        // Then
+    }
 
 }///:~

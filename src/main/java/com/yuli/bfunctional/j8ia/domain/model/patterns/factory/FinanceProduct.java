@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class FinanceProduct implements IFinanceProduct {
 
-	private String name;
-	private long amount;
+    private String name;
+    private long amount;
 
 }///:~
